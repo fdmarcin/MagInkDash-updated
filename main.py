@@ -54,7 +54,13 @@ if __name__ == '__main__':
     calEndDatetime = displayTZ.localize(dt.combine(currDate + datetime.timedelta(days=numCalDaysToShow-1), dt.max.time()))
     calModule = GcalModule()
     eventList = calModule.get_events(
-        currDate, calendars, calStartDatetime, calEndDatetime, displayTZ, numCalDaysToShow)
+        currDate,
+        calendars,
+        calStartDatetime,
+        calEndDatetime,
+        displayTZ,
+        numCalDaysToShow,
+    )
 
     # Retrieve Random Fact from OpenAI
     oaiModule = OAIModule()
