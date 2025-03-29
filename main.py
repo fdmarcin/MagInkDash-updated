@@ -61,10 +61,18 @@ if __name__ == '__main__':
     topic = oaiModule.get_random_fact(currDate, openai_api_key)
 
     # Render Dashboard Image
-    renderService = RenderHelper(imageWidth, imageHeight, rotateAngle)
-    renderService.process_inputs(currDate, current_weather, hourly_forecast, daily_forecast, eventList, numCalDaysToShow,
-                                 topic, path_to_server_image)
 
     logger.info("Completed dashboard update")
+    renderService = RenderHelper(imageWidth, imageHeight, rotateAngle, timeFormat)
+    renderService.process_inputs(
+        currDate,
+        current_weather,
+        hourly_forecast,
+        daily_forecast,
+        eventList,
+        numCalDaysToShow,
+        topic,
+        path_to_server_image,
+    )
 
 
