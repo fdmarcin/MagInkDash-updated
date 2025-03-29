@@ -70,8 +70,6 @@ if __name__ == '__main__':
     topic = oaiModule.get_random_fact(currDate, openai_api_key)
 
     # Render Dashboard Image
-
-    logger.info("Completed dashboard update")
     renderService = RenderHelper(imageWidth, imageHeight, rotateAngle, timeFormat)
     renderService.process_inputs(
         currDate,
@@ -84,4 +82,8 @@ if __name__ == '__main__':
         path_to_server_image,
     )
 
+    # Get absolute path to the generated image
+    absolute_image_path = os.path.abspath(path_to_server_image)
+    logger.info(f"Dashboard image saved to: {absolute_image_path}")
 
+    logger.info("Completed dashboard update")

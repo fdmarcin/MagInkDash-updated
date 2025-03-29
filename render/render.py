@@ -48,17 +48,55 @@ class RenderHelper:
             height=target_height)
 
     def get_screenshot(self, path_to_server_image):
+        import subprocess
+        import os
+        from selenium.webdriver.chrome.service import Service
+
         opts = Options()
         opts.add_argument("--headless")
-        opts.add_argument("--hide-scrollbars");
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        opts.add_argument("--hide-scrollbars")
         opts.add_argument('--force-device-scale-factor=1')
-        driver = webdriver.Chrome(options=opts)
-        self.set_viewport_size(driver)
-        driver.get(self.htmlFile)
-        sleep(1)
-        driver.get_screenshot_as_file(self.currPath + '/dashboard.png')
-        driver.get_screenshot_as_file(path_to_server_image)
-        self.logger.info('Screenshot captured and saved to file.')
+
+        # Try to automatically locate chromedriver
+        try:
+            chromedriver_path = subprocess.check_output(['which', 'chromedriver']).decode('utf-8').strip()
+            self.logger.info(f"Found chromedriver at: {chromedriver_path}")
+        except (subprocess.SubprocessError, FileNotFoundError):
+            # Default paths to try if 'which' command fails
+            possible_paths = [
+                '/usr/bin/chromedriver',
+                '/usr/local/bin/chromedriver',
+                '/usr/lib/chromium-browser/chromedriver'
+            ]
+
+            chromedriver_path = None
+            for path in possible_paths:
+                if os.path.exists(path) and os.access(path, os.X_OK):
+                    chromedriver_path = path
+                    self.logger.info(f"Found chromedriver at default location: {chromedriver_path}")
+                    break
+
+            if not chromedriver_path:
+                self.logger.error("Could not find chromedriver. Please install it with 'sudo apt-get install chromium-chromedriver'")
+                raise FileNotFoundError("chromedriver executable not found in PATH")
+
+        # Use the discovered chromedriver path
+        service = Service(chromedriver_path)
+
+        try:
+            driver = webdriver.Chrome(service=service, options=opts)
+            self.set_viewport_size(driver)
+            driver.get(self.htmlFile)
+            sleep(1)
+            driver.get_screenshot_as_file(self.currPath + '/dashboard.png')
+            driver.get_screenshot_as_file(path_to_server_image)
+            driver.quit()  # Make sure to quit the driver to free resources
+            self.logger.info('Screenshot captured and saved to file.')
+        except Exception as e:
+            self.logger.error(f"Error taking screenshot: {str(e)}")
+            raise
 
     def get_short_time(self, datetimeObj):
         is24hour = (self.timeFormat == 24)
