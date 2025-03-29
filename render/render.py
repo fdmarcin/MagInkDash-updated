@@ -20,13 +20,14 @@ from selenium.webdriver.common.by import By
 
 class RenderHelper:
 
-    def __init__(self, width, height, angle):
+    def __init__(self, width, height, angle, timeFormat=12):
         self.logger = logging.getLogger('maginkdash')
         self.currPath = str(pathlib.Path(__file__).parent.absolute())
         self.htmlFile = 'file://' + self.currPath + '/dashboard.html'
         self.imageWidth = width
         self.imageHeight = height
         self.rotateAngle = angle
+        self.timeFormat = timeFormat  # 12 or 24-hour time format
 
     def set_viewport_size(self, driver):
 
@@ -59,11 +60,15 @@ class RenderHelper:
         driver.get_screenshot_as_file(path_to_server_image)
         self.logger.info('Screenshot captured and saved to file.')
 
-    def get_short_time(self, datetimeObj, is24hour=False):
+    def get_short_time(self, datetimeObj):
+        is24hour = (self.timeFormat == 24)
         datetime_str = ''
+
         if is24hour:
-            datetime_str = '{}:{:02d}'.format(datetimeObj.hour, datetimeObj.minute)
+            # 24-hour format
+            datetime_str = '{:02d}:{:02d}'.format(datetimeObj.hour, datetimeObj.minute)
         else:
+            # 12-hour format
             if datetimeObj.minute > 0:
                 datetime_str = '.{:02d}'.format(datetimeObj.minute)
 
@@ -75,6 +80,7 @@ class RenderHelper:
                 datetime_str = '{}{}pm'.format(str(datetimeObj.hour % 12), datetime_str)
             else:
                 datetime_str = '{}{}am'.format(str(datetimeObj.hour), datetime_str)
+
         return datetime_str
 
     def process_inputs(
