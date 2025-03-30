@@ -172,6 +172,17 @@ Some features of the dashboard:
 
 ### Configure the Inkplate
 
+1. Optional. Create a Telegram bot:
+   1. Sign in to Telegram and find [@BotFather](https://telegram.me/BotFather).
+   1. Select **Start** or **Start bot**.
+   1. In the chat, send `/newbot`.
+   1. Choose a name for your bot, for example, `MagInkDash battery level`.
+   1. Choose a username for your bot.
+   1. When you see a success message, write down the token you get for later.
+      Don't share it with anyone.
+   1. Click the `t.me` link to your bot and select **Start**.
+   1. Find [`@myidbot`](https://t.me/myidbot), select **Start** and send `/getid`.
+      Write down your Telegram ID for later.
 1. Follow the [official resources](https://inkplate.readthedocs.io/en/latest/get-started.html)
    (only the Arduino portion of the guide is relevant).
    It can take some trial and error for those new to microcontroller programming but it's all worth it!
