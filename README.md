@@ -88,33 +88,9 @@ Some features of the dashboard:
    ```
 
 1. Download the files in this repo to a folder in your PC.
-
-1. Create the config file `config.json` in the project root:
-
-   ```json
-   {
-     "displayTZ": "Asia/Hong_Kong",
-     "calendars": ["primary"],
-     "numCalDaysToShow": 3,
-     "timeFormat": 12,
-     "owm_api_key": "ENTER YOUR OWN API KEY HERE",
-     "lat": 22.3193,
-     "lon": 114.1694,
-     "imageWidth": 1200,
-     "imageHeight": 825,
-     "rotateAngle": 0,
-     "openai_api_key": "ENTER YOUR OWN API KEY HERE",
-     "path_to_server_image": "/var/www/html/maginkdash.png"
-   }
-   ```
-
-   - To format calendar times using the 24-hour clock, change the value of `timeFormat` to `24`.
-   - Set `lat` and `lon` to your location's latitude and longitude for weather.
-   - `imageWidth` and `imageHeight` should match the resolution of your display.
-     `1200` and `825` match Inkplate 10.
-
 1. To access your Google Calendar events, it's necessary to first grant the access.
-   Follow [Google's Python quick start](https://developers.google.com/calendar/api/quickstart/python) on your PC to get the `credentials.json` file from your Google API.
+   Follow [Google's Python quick start](https://developers.google.com/calendar/api/quickstart/python)
+   on your PC to get the `credentials.json` file from your Google API.
    Don't worry, take your time.
    I'll be waiting here.
 
@@ -126,6 +102,18 @@ Some features of the dashboard:
    ```bash
    python3 quickstart.py
    ```
+
+1. Fill out the config file [`config.json`](./config.json):
+
+   - `displayTZ`: Set to your timezone. Use the [TZ identifier format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
+   - `timeFormat`: To format calendar times using the 24-hour clock, change the value to `24`.
+   - `owm_api_key`: Enter your OpenWeatherMap API key.
+     I used the "Pay as you call" [One Call API 3.0](https://openweathermap.org/api).
+   - `lat` and `lon`: Set to your location's latitude and longitude for weather.
+   - `imageWidth` and `imageHeight` should match the resolution of your display.
+     `1200` and `825` match Inkplate 10.
+   - `openai_api_key`: Enter your [OpenAI API key](https://platform.openai.com/settings/organization/api-keys).
+     I paid 5 USD to get into the [Usage tier 1](https://platform.openai.com/settings/organization/limits) and get free requests.
 
 1. Copy all the files (other than the `inkplate` folder) over to your RPi using your preferred means.
 
@@ -220,7 +208,7 @@ What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 
    - Improved error handling and logging for weather data retrieval.
    - Added robust defaults for missing or incomplete weather data.
-   - Ensured compatibility with the current OneCall API (v3.0).
+   - Ensured compatibility with the current One Call API (v3.0).
 
 1. Improved Chromedriver detection
 
