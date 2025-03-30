@@ -10,6 +10,7 @@ import datetime
 import logging
 import sys
 import json
+import os
 from datetime import datetime as dt
 from pytz import timezone
 from gcal.gcal import GcalModule
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     imageWidth = config['imageWidth']  # Width of image to be generated for display.
     imageHeight = config['imageHeight']  # Height of image to be generated for display.
     rotateAngle = config['rotateAngle']  # If image is rendered in portrait orientation, angle to rotate to fit screen
+    timeFormat = config.get('timeFormat', 12)  # 12 or 24-hour time format, default to 12 if not specified
     lat = config["lat"] # Latitude in decimal of the location to retrieve weather forecast for
     lon = config["lon"] # Longitude in decimal of the location to retrieve weather forecast for
     owm_api_key = config["owm_api_key"]  # OpenWeatherMap API key. Required to retrieve weather forecast.
@@ -43,6 +45,7 @@ if __name__ == '__main__':
     logger.addHandler(logging.StreamHandler(sys.stdout))  # print logger to stdout
     logger.setLevel(logging.INFO)
     logger.info("Starting dashboard update")
+    logger.info(f"Using {'24' if timeFormat == 24 else '12'}-hour time format")
 
     # Retrieve Weather Data
     owmModule = OWMModule()
@@ -54,17 +57,33 @@ if __name__ == '__main__':
     calEndDatetime = displayTZ.localize(dt.combine(currDate + datetime.timedelta(days=numCalDaysToShow-1), dt.max.time()))
     calModule = GcalModule()
     eventList = calModule.get_events(
-        currDate, calendars, calStartDatetime, calEndDatetime, displayTZ, numCalDaysToShow)
+        currDate,
+        calendars,
+        calStartDatetime,
+        calEndDatetime,
+        displayTZ,
+        numCalDaysToShow,
+    )
 
     # Retrieve Random Fact from OpenAI
     oaiModule = OAIModule()
     topic = oaiModule.get_random_fact(currDate, openai_api_key)
 
     # Render Dashboard Image
-    renderService = RenderHelper(imageWidth, imageHeight, rotateAngle)
-    renderService.process_inputs(currDate, current_weather, hourly_forecast, daily_forecast, eventList, numCalDaysToShow,
-                                 topic, path_to_server_image)
+    renderService = RenderHelper(imageWidth, imageHeight, rotateAngle, timeFormat)
+    renderService.process_inputs(
+        currDate,
+        current_weather,
+        hourly_forecast,
+        daily_forecast,
+        eventList,
+        numCalDaysToShow,
+        topic,
+        path_to_server_image,
+    )
+
+    # Get absolute path to the generated image
+    absolute_image_path = os.path.abspath(path_to_server_image)
+    logger.info(f"Dashboard image saved to: {absolute_image_path}")
 
     logger.info("Completed dashboard update")
-
-

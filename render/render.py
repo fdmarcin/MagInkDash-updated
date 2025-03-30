@@ -20,13 +20,14 @@ from selenium.webdriver.common.by import By
 
 class RenderHelper:
 
-    def __init__(self, width, height, angle):
+    def __init__(self, width, height, angle, timeFormat=12):
         self.logger = logging.getLogger('maginkdash')
         self.currPath = str(pathlib.Path(__file__).parent.absolute())
         self.htmlFile = 'file://' + self.currPath + '/dashboard.html'
         self.imageWidth = width
         self.imageHeight = height
         self.rotateAngle = angle
+        self.timeFormat = timeFormat  # 12 or 24-hour time format
 
     def set_viewport_size(self, driver):
 
@@ -47,23 +48,65 @@ class RenderHelper:
             height=target_height)
 
     def get_screenshot(self, path_to_server_image):
+        import subprocess
+        import os
+        from selenium.webdriver.chrome.service import Service
+
         opts = Options()
         opts.add_argument("--headless")
-        opts.add_argument("--hide-scrollbars");
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        opts.add_argument("--hide-scrollbars")
         opts.add_argument('--force-device-scale-factor=1')
-        driver = webdriver.Chrome(options=opts)
-        self.set_viewport_size(driver)
-        driver.get(self.htmlFile)
-        sleep(1)
-        driver.get_screenshot_as_file(self.currPath + '/dashboard.png')
-        driver.get_screenshot_as_file(path_to_server_image)
-        self.logger.info('Screenshot captured and saved to file.')
 
-    def get_short_time(self, datetimeObj, is24hour=False):
+        # Try to automatically locate chromedriver
+        try:
+            chromedriver_path = subprocess.check_output(['which', 'chromedriver']).decode('utf-8').strip()
+            self.logger.info(f"Found chromedriver at: {chromedriver_path}")
+        except (subprocess.SubprocessError, FileNotFoundError):
+            # Default paths to try if 'which' command fails
+            possible_paths = [
+                '/usr/bin/chromedriver',
+                '/usr/local/bin/chromedriver',
+                '/usr/lib/chromium-browser/chromedriver'
+            ]
+
+            chromedriver_path = None
+            for path in possible_paths:
+                if os.path.exists(path) and os.access(path, os.X_OK):
+                    chromedriver_path = path
+                    self.logger.info(f"Found chromedriver at default location: {chromedriver_path}")
+                    break
+
+            if not chromedriver_path:
+                self.logger.error("Could not find chromedriver. Please install it with 'sudo apt-get install chromium-chromedriver'")
+                raise FileNotFoundError("chromedriver executable not found in PATH")
+
+        # Use the discovered chromedriver path
+        service = Service(chromedriver_path)
+
+        try:
+            driver = webdriver.Chrome(service=service, options=opts)
+            self.set_viewport_size(driver)
+            driver.get(self.htmlFile)
+            sleep(1)
+            driver.get_screenshot_as_file(self.currPath + '/dashboard.png')
+            driver.get_screenshot_as_file(path_to_server_image)
+            driver.quit()  # Make sure to quit the driver to free resources
+            self.logger.info('Screenshot captured and saved to file.')
+        except Exception as e:
+            self.logger.error(f"Error taking screenshot: {str(e)}")
+            raise
+
+    def get_short_time(self, datetimeObj):
+        is24hour = (self.timeFormat == 24)
         datetime_str = ''
+
         if is24hour:
-            datetime_str = '{}:{:02d}'.format(datetimeObj.hour, datetimeObj.minute)
+            # 24-hour format
+            datetime_str = '{:02d}:{:02d}'.format(datetimeObj.hour, datetimeObj.minute)
         else:
+            # 12-hour format
             if datetimeObj.minute > 0:
                 datetime_str = '.{:02d}'.format(datetimeObj.minute)
 
@@ -75,9 +118,20 @@ class RenderHelper:
                 datetime_str = '{}{}pm'.format(str(datetimeObj.hour % 12), datetime_str)
             else:
                 datetime_str = '{}{}am'.format(str(datetimeObj.hour), datetime_str)
+
         return datetime_str
 
-    def process_inputs(self, current_date, current_weather, hourly_forecast, daily_forecast, event_list, num_cal_days, topic, path_to_server_image):
+    def process_inputs(
+        self,
+        current_date,
+        current_weather,
+        hourly_forecast,
+        daily_forecast,
+        event_list,
+        num_cal_days,
+        topic,
+        path_to_server_image,
+    ):
 
         # Read html template
         with open(self.currPath + '/dashboard_template.html', 'r') as file:
@@ -99,6 +153,35 @@ class RenderHelper:
                 cal_events_text += '</div>\n'
             cal_events_list.append(cal_events_text)
 
+        # Default values for weather in case data is missing
+        default_weather = {
+            "weather": [{"description": "Unknown", "id": 800}],
+            "temp": 0
+        }
+        default_daily = {
+            "weather": [{"id": 800}],
+            "pop": 0,
+            "temp": {"min": 0, "max": 0}
+        }
+
+        # Ensure we have valid weather data or use defaults
+        if not current_weather or "weather" not in current_weather or len(current_weather["weather"]) == 0:
+            self.logger.warning("Current weather data is missing or invalid, using defaults")
+            current_weather = default_weather
+
+        next_hour_weather = default_weather
+        if hourly_forecast and len(hourly_forecast) > 1:
+            next_hour_weather = hourly_forecast[1]
+
+        # Ensure we have valid daily forecast data
+        daily_forecast_data = []
+        for i in range(3):
+            if daily_forecast and len(daily_forecast) > i:
+                daily_forecast_data.append(daily_forecast[i])
+            else:
+                self.logger.warning(f"Daily forecast for day {i} is missing, using defaults")
+                daily_forecast_data.append(default_daily)
+
         # Append the bottom and write the file
         htmlFile = open(self.currPath + '/dashboard.html', "w")
         htmlFile.write(dashboard_template.format(
@@ -111,24 +194,21 @@ class RenderHelper:
             events_tomorrow=cal_events_list[1],
             events_dayafter=cal_events_list[2],
             # I'm choosing to show the forecast for the next hour instead of the current weather
-            # current_weather_text=string.capwords(current_weather["weather"][0]["description"]),
-            # current_weather_id=current_weather["weather"][0]["id"],
-            # current_weather_temp=round(current_weather["temp"]),
-            current_weather_text=string.capwords(hourly_forecast[1]["weather"][0]["description"]),
-            current_weather_id=hourly_forecast[1]["weather"][0]["id"],
-            current_weather_temp=round(hourly_forecast[1]["temp"]),
-            today_weather_id=daily_forecast[0]["weather"][0]["id"],
-            tomorrow_weather_id=daily_forecast[1]["weather"][0]["id"],
-            dayafter_weather_id=daily_forecast[2]["weather"][0]["id"],
-            today_weather_pop=str(round(daily_forecast[0]["pop"] * 100)),
-            tomorrow_weather_pop=str(round(daily_forecast[1]["pop"] * 100)),
-            dayafter_weather_pop=str(round(daily_forecast[2]["pop"] * 100)),
-            today_weather_min=str(round(daily_forecast[0]["temp"]["min"])),
-            tomorrow_weather_min=str(round(daily_forecast[1]["temp"]["min"])),
-            dayafter_weather_min=str(round(daily_forecast[2]["temp"]["min"])),
-            today_weather_max=str(round(daily_forecast[0]["temp"]["max"])),
-            tomorrow_weather_max=str(round(daily_forecast[1]["temp"]["max"])),
-            dayafter_weather_max=str(round(daily_forecast[2]["temp"]["max"])),
+            current_weather_text=string.capwords(next_hour_weather["weather"][0]["description"]),
+            current_weather_id=next_hour_weather["weather"][0]["id"],
+            current_weather_temp=round(next_hour_weather.get("temp", 0)),
+            today_weather_id=daily_forecast_data[0]["weather"][0]["id"],
+            tomorrow_weather_id=daily_forecast_data[1]["weather"][0]["id"],
+            dayafter_weather_id=daily_forecast_data[2]["weather"][0]["id"],
+            today_weather_pop=str(round(daily_forecast_data[0].get("pop", 0) * 100)),
+            tomorrow_weather_pop=str(round(daily_forecast_data[1].get("pop", 0) * 100)),
+            dayafter_weather_pop=str(round(daily_forecast_data[2].get("pop", 0) * 100)),
+            today_weather_min=str(round(daily_forecast_data[0]["temp"].get("min", 0))),
+            tomorrow_weather_min=str(round(daily_forecast_data[1]["temp"].get("min", 0))),
+            dayafter_weather_min=str(round(daily_forecast_data[2]["temp"].get("min", 0))),
+            today_weather_max=str(round(daily_forecast_data[0]["temp"].get("max", 0))),
+            tomorrow_weather_max=str(round(daily_forecast_data[1]["temp"].get("max", 0))),
+            dayafter_weather_max=str(round(daily_forecast_data[2]["temp"].get("max", 0))),
             topic_title=topic["title"],
             topic_text=topic["text"]
         ))
