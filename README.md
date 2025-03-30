@@ -181,6 +181,8 @@ Some features of the dashboard:
    1. When you see a success message, write down the token you get for later.
       Don't share it with anyone.
    1. Click the `t.me` link to your bot and select **Start**.
+      This is the bot that will message you on Telegram when your Inkplate battery is low.
+      You can customize its profile picture and description in the chat **Manage Bot** option.
    1. Find [`@myidbot`](https://t.me/myidbot), select **Start** and send `/getid`.
       Write down your Telegram ID for later.
 1. Follow the [official resources](https://inkplate.readthedocs.io/en/latest/get-started.html)
