@@ -218,7 +218,8 @@ Some features of the dashboard:
 1. In the Arduino IDE, open the `inkplate/inkplate.ino` file and upload it when connected to the Inkplate.
 
    When prompted to select the serial port, on Linux you should probably select `/dev/ttyUSB0`.
-   If you get an error, follow [the official steps](https://docs.arduino.cc/software/ide-v1/tutorials/Linux/#please-read).
+   If you get an error, follow [the official steps](https://docs.arduino.cc/software/ide-v1/tutorials/Linux/#please-read), then log out and back in.
+   Also, change upload speed to `115200` in Arduino IDE **Tools > Upload speed**.
 
 1. That's all! Your Magic Dashboard should now be refreshed every hour!
 
