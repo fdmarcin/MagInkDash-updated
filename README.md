@@ -62,6 +62,8 @@ Some features of the dashboard:
 
 ## Setting up
 
+### Prepare the RaspberryPi
+
 1. Flash [Raspberrypi OS](https://www.raspberrypi.org/software/operating-systems/) to a SD/MicroSD Card.
 
    If you're using a Raspberry Pi with 32-bit CPU, there are [known issues](https://forums.raspberrypi.com/viewtopic.php?t=323478) between the latest RPiOS "bullseye" release and `chromium-browser`, which is required to run this code. As such, I would recommend that you keep to the legacy `buster` OS if you're still running this on older RPi hardware.
@@ -80,7 +82,8 @@ Some features of the dashboard:
 
    ```bash
    sudo apt update
-   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev apache2
+   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
+   sudo apt install apache2 -y
    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
    pip3 install pytz selenium Pillow openai
    sudo chown pi:www-data /var/www/html
@@ -115,9 +118,39 @@ Some features of the dashboard:
    - `openai_api_key`: Enter your [OpenAI API key](https://platform.openai.com/settings/organization/api-keys).
      I paid 5 USD to get into the [Usage tier 1](https://platform.openai.com/settings/organization/limits) and get free requests.
 
+1. The script to generate the dashboard should work now!
+   To test it manually, run the following in the `MagInkDash-updated` folder:
+
+   ```bash
+   python3 main.py
+   ```
+
+1. Write down the URL of the generated image.
+
+   When you installed the Apache 2 package earlier, an Apache server started automatically.
+   To confirm whether this web server is running or not, run the following command:
+
+   ```bash
+   sudo service apache2 status
+   ```
+
+   From now on, Apache will automatically serve anything that's in the `/var/www/html` folder. That's where our script puts the generated image.
+   To get the URL for it, substitute `/var/www/html` with your Pi's IP address or URL (in the format of `<hostname>.local`, for example, `raspberrypi.local`). Then, the generated image should be visible at http://raspberrypi.local/maginkdash.png.
+
+   However, if you don’t know the IP address of your Raspberry Pi, run the command below in the terminal of your Raspberry Pi:
+
+   ```bash
+   hostname -I
+   ```
+
+   The server you just set up is only accessible for people connected to your home network and it's
+   not accessible through the internet.
+   To make this server accessible from anywhere, you'd need to set up port forwarding on your router.
+
 1. Copy all the files (other than the `inkplate` folder) over to your RPi using your preferred means.
 
-1. Run the following command in the RPi Terminal to open crontab.
+1. In the RPi Terminal, run the following command. This is where you'll define scheduled execution
+   of the code to regenerate your dashboard.
 
    ```bash
    crontab -e
@@ -125,20 +158,21 @@ Some features of the dashboard:
 
 1. Add a command to crontab so your RPi knows when to run the MagInkDash Python script.
 
-   For example:
+   For example, every day, on the hour, every hour:
 
    ```bash
-   # Every day, on the hour, every hour:
-   0 * * * * cd /location/to/your/MagInkDash && python3 main.py
+   0 * * * * cd /location/to/your/MagInkDash-updated && python3 main.py
    ```
+
+   Monday to Friday, on the hour, every hour, from 9 am to 9 pm:
 
    ```bash
-   # Monday to Friday, on the hour, every hour:
-   0 * * * 1-5 cd /location/to/your/MagInkDash && python3 main.py
+   0 9-21 * * 1-5 cd /location/to/your/MagInkDash-updated && python3 main.py
    ```
 
-1. Configure the Inkplate.
-   Follow the [official resources](https://inkplate.readthedocs.io/en/latest/get-started.html)
+### Configure the Inkplate
+
+1. Follow the [official resources](https://inkplate.readthedocs.io/en/latest/get-started.html)
    (only the Arduino portion of the guide is relevant).
    It can take some trial and error for those new to microcontroller programming but it's all worth it!
    You'll need to be able to run `*.ino` scripts via Arduino IDE before proceeding.
