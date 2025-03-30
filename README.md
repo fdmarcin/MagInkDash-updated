@@ -212,7 +212,7 @@ Some features of the dashboard:
    #define BATTV_LOW    3.4     // voltage considered to be low battery
    ```
 
-1. From the Arduino IDE, run the `inkplate/inkplate.ino` file when connected to the Inkplate.
+1. In the Arduino IDE, open the `inkplate/inkplate.ino` file and upload it when connected to the Inkplate.
 
 1. That's all! Your Magic Dashboard should now be refreshed every hour!
 
