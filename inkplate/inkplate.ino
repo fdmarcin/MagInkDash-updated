@@ -1,18 +1,3 @@
-/*
-Adapted from the Inkplate10_Image_Frame_From_Web example for Soldered Inkplate 10
-https://github.com/SolderedElectronics/Inkplate-Arduino-library/blob/master/examples/Inkplate10/Projects/Inkplate10_Image_Frame_From_Web/Inkplate10_Image_Frame_From_Web.ino
-
-What this code does:
-
-1. Connect to a WiFi access point
-2. Retrieve an image from a web address
-3. Display the image on the Inkplate 10 device
-4. (Optional) Check the battery level on the Inkplate device
-5. (Optional) Send a message via Telegram if battery level is low
-6. Set a sleep timer for 60 minutes, and allow the Inkplate to go into deep sleep to conserve battery
-*/
-
-// Next 3 lines are a precaution, you can ignore those, and the example would also work without them
 #if !defined(ARDUINO_INKPLATE10) && !defined(ARDUINO_INKPLATE10V2)
 #error "Wrong board selection for this example, please select e-radionica Inkplate10 or Soldered Inkplate10 in the boards menu."
 #endif
@@ -50,8 +35,19 @@ void setup()
     Serial.begin(115200);
     display.begin();
 
-    // Join wifi, retrieve image, update display
-    display.joinAP(ssid, password);
+    // Connect to WiFi
+    Serial.print("Connecting to WiFi...");
+    WiFi.begin(ssid, password);
+
+    // Wait for connection
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("Connected!");
+
+    // Retrieve and display image
+    Serial.print("Downloading image...");
     char url[256];
     strcpy(url, imgurl);
     Serial.println(display.drawImage(url, display.PNG, 0, 0));

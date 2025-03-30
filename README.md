@@ -212,6 +212,9 @@ Some features of the dashboard:
    #define BATTV_LOW    3.4     // voltage considered to be low battery
    ```
 
+1. In the Arduino IDE, select **Tools > Manage Libraries**, search for `UniversalTelegramBot` and select **Install** next to it.
+   If you're prompted to also install its dependency, agree to it.
+
 1. In the Arduino IDE, open the `inkplate/inkplate.ino` file and upload it when connected to the Inkplate.
 
 1. That's all! Your Magic Dashboard should now be refreshed every hour!
