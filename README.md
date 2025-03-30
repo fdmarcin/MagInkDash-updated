@@ -211,42 +211,42 @@ What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 
 1. Updated OpenAI API integration
 
-- Migrated from the deprecated `openai.Completion.create()` method to the modern client-based approach using `from openai import OpenAI`.
-- Updated from the deprecated `text-davinci-003` model to `gpt-3.5-turbo`.
-- Modified the prompt format to use the required chat completion format with messages array.
-- Updated response parsing to match the new API structure.
+   - Migrated from the deprecated `openai.Completion.create()` method to the modern client-based approach using `from openai import OpenAI`.
+   - Updated from the deprecated `text-davinci-003` model to `gpt-3.5-turbo`.
+   - Modified the prompt format to use the required chat completion format with messages array.
+   - Updated response parsing to match the new API structure.
 
 1. Enhanced OpenWeatherMap API usage
 
-- Improved error handling and logging for weather data retrieval.
-- Added robust defaults for missing or incomplete weather data.
-- Ensured compatibility with the current OneCall API (v3.0).
+   - Improved error handling and logging for weather data retrieval.
+   - Added robust defaults for missing or incomplete weather data.
+   - Ensured compatibility with the current OneCall API (v3.0).
 
 1. Improved Chromedriver detection
 
-- Added smart auto-detection of chromedriver location using `which chromedriver`.
-- Implemented fallback to common installation locations if auto-detection fails.
-- Added helpful error messages and logging for troubleshooting.
-- Enhanced error handling during the screenshot process.
+   - Added smart auto-detection of chromedriver location using `which chromedriver`.
+   - Implemented fallback to common installation locations if auto-detection fails.
+   - Added helpful error messages and logging for troubleshooting.
+   - Enhanced error handling during the screenshot process.
 
 1. Added time format configuration
 
-- Added a configurable 12/24-hour time format option in `config.json`.
-- Implemented time formatting throughout the application that respects the user's preference.
-- Added graceful handling of missing configuration with sensible defaults.
+   - Added a configurable 12/24-hour time format option in `config.json`.
+   - Implemented time formatting throughout the application that respects the user's preference.
+   - Added graceful handling of missing configuration with sensible defaults.
 
 1. Better output and logging
 
-- Added display of the absolute path to the generated image for easier verification.
-- Improved logging throughout the application.
-- Added informative messages about time format and other configuration options.
+   - Added display of the absolute path to the generated image for easier verification.
+   - Improved logging throughout the application.
+   - Added informative messages about time format and other configuration options.
 
 1. General code improvements
 
-- Enhanced error handling throughout the codebase.
-- Added more detailed logging.
-- Improved resource management (properly closing webdriver with `driver.quit()`).
-- Added configuration parameters with sensible defaults for better backward compatibility.
+   - Enhanced error handling throughout the codebase.
+   - Added more detailed logging.
+   - Improved resource management (properly closing webdriver with `driver.quit()`).
+   - Added configuration parameters with sensible defaults for better backward compatibility.
 
 These updates make MagInkDash compatible with current APIs, more user-friendly, and more robust in various environments, particularly on headless Raspberry Pi systems.
 
