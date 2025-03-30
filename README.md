@@ -150,9 +150,33 @@ Some features of the dashboard:
    ```
 
 1. Configure the Inkplate.
-   Follow the [official resources](https://inkplate.readthedocs.io/en/latest/get-started.html) (only the Arduino portion of the guide is relevant).
+   Follow the [official resources](https://inkplate.readthedocs.io/en/latest/get-started.html)
+   (only the Arduino portion of the guide is relevant).
    It can take some trial and error for those new to microcontroller programming but it's all worth it!
    You'll need to be able to run `*.ino` scripts via Arduino IDE before proceeding.
+
+1. Edit the following lines in `inkplate/inkplate.ino` to add your wi-fi details and optionally configure
+   your Telegram bot to message you when the battery is low:
+
+   ```cpp
+   const char ssid[] = "YOUR WIFI SSID";    // Your WiFi SSID
+   const char *password = "YOUR WIFI PASSWORD"; // Your WiFi password
+   const char *imgurl = "http://url.to.your.server/maginkdash.png"; // Your dashboard image web address
+
+   // Initialize Telegram BOT
+   #define BOTtoken "YOUR TELEGRAM BOT TOKEN"  // your Bot Token (Get from Botfather)
+
+   // Use @myidbot to find out the chat ID of an individual or a group
+   // Also note that you need to click "start" on a bot before it can
+   // message you
+   #define CHAT_ID "YOUR TELEGRAM CHAT ID TO SEND MESSAGES TO"
+
+   // Battery values
+   #define BATTV_MAX    4.1     // maximum voltage of battery
+   #define BATTV_MIN    3.2     // what we regard as an empty battery
+   #define BATTV_LOW    3.4     // voltage considered to be low battery
+   ```
+
 1. From the Arduino IDE, run the `inkplate/inkplate.ino` file when connected to the Inkplate.
 
 1. That's all! Your Magic Dashboard should now be refreshed every hour!
