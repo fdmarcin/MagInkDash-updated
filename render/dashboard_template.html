@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
         <link rel="stylesheet" href="css/weather-icons.min.css">
+        <link rel="stylesheet" href="css/dashboard.css">
     </head>
     <body style="background: url('background.jpg') no-repeat center center fixed; background-size: cover;">
         <div class="container">
@@ -46,8 +47,11 @@
                     <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 20px"></div>
                     </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-4">
+
+                    <!-- Weather forecast section -->
+                    <div class="row align-items-start weather-forecast">
+                        <!-- Today's weather -->
+                        <div class="today-column col-md-{col_today_width}">
                             <div class="row align-items-start ">
                                 <div class="col-md-12 text-center">
                                     <i class="wi wi-owm-{today_weather_id}" style="font-size: 10rem; color:gray"></i>
@@ -59,7 +63,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+
+                        <!-- Tomorrow's weather -->
+                        <div class="tomorrow-column col-md-{col_tomorrow_width} {tomorrow_vis_class}">
                             <div class="row align-items-start ">
                                 <div class="col-md-12 text-center">
                                     <i class="wi wi-owm-{tomorrow_weather_id}" style="font-size: 10rem; color:gray"></i>
@@ -71,7 +77,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+
+                        <!-- Day after tomorrow's weather -->
+                        <div class="dayafter-column col-md-4 {dayafter_vis_class}">
                             <div class="row align-items-start ">
                                 <div class="col-md-12 text-center">
                                     <i class="wi wi-owm-{dayafter_weather_id}" style="font-size: 10rem; color:gray"></i>
@@ -84,14 +92,19 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 50px"></div>
                     </div>
                 </div>
+
+                <!-- Calendar events section -->
                 <div class="col-md-6">
                     <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 50px"></div>
                     </div>
+
+                    <!-- Today's events -->
                     <div class="row align-items-start ">
                         <div class="col-md-12">
                             <h2>Today</h2>
@@ -100,10 +113,13 @@
                             </ol>
                         </div>
                     </div>
+
                     <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 10px"></div>
                     </div>
-                    <div class="row align-items-start ">
+
+                    <!-- Tomorrow's events -->
+                    <div class="row align-items-start tomorrow-events {tomorrow_vis_class}">
                         <div class="col-md-12">
                             <h2>{tomorrow}</h2>
                             <ol class="list-unstyled">
@@ -111,10 +127,14 @@
                             </ol>
                         </div>
                     </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 10px"></div>
+
+                    <!-- Day after spacer - only shown if needed -->
+                    <div class="row align-items-start dayafter-spacer {dayafter_vis_class}">
+                        <div class="col-md-12" style="height: 10px"></div>
                     </div>
-                    <div class="row align-items-start ">
+
+                    <!-- Day after tomorrow's events -->
+                    <div class="row align-items-start dayafter-events {dayafter_vis_class}">
                         <div class="col-md-12">
                             <h2>{dayafter}</h2>
                             <ol class="list-unstyled">
@@ -122,9 +142,12 @@
                             </ol>
                         </div>
                     </div>
+
                     <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 10px"></div>
                     </div>
+
+                    <!-- Topic/Fact of the day -->
                     <div class="row align-items-start ">
                         <div class="col-md-12">
                             <h2>{topic_title}</h2>
