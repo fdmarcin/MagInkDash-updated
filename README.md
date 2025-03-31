@@ -252,9 +252,6 @@ It's much more polished and also actively developed.
 
 What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 
-<details>
-<summary>Click to expand</summary>
-
 - OpenAI API integration
   - Migrated from the deprecated `openai.Completion.create()` method to the modern client-based approach using `from openai import OpenAI`.
   - Updated from the deprecated `text-davinci-003` model to `gpt-3.5-turbo`.
@@ -287,7 +284,5 @@ What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
   - Added configuration parameters with sensible defaults for better backward compatibility.
 
 These updates make MagInkDash compatible with current APIs, more user-friendly, and more robust in various environments, particularly on headless Raspberry Pi systems.
-
-</details>
 
 See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/README.md>.
