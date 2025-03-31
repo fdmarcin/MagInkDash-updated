@@ -1,0 +1,19 @@
+/* Additional CSS for the dashboard */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive column handling */
+@media (min-width: 768px) {
+    .col-md-4 {
+        width: 33.333333%;
+    }
+
+    .col-md-6 {
+        width: 50%;
+    }
+
+    .col-md-12 {
+        width: 100%;
+    }
+}
