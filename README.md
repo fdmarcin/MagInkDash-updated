@@ -109,6 +109,10 @@ Some features of the dashboard:
 1. Fill out the config file [`config.json`](./config.json):
 
    - `displayTZ`: Set to your timezone. Use the [TZ identifier format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
+   - `calendars`: `primary` is your main calendar.
+     To add more, get their IDs from Google Calendar settings.
+     For example: `["primary", "example@import.calendar.google.com"]`
+   - `numCalDaysToShow`: Set to `1`, `2`, or `3`.
    - `timeFormat`: To format calendar times using the 24-hour clock, change the value to `24`.
    - `owm_api_key`: Enter your OpenWeatherMap API key.
      I used the "Pay as you call" [One Call API 3.0](https://openweathermap.org/api).
