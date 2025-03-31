@@ -21,35 +21,35 @@ class OAIModule:
         topics = [
             {
                 "title": "Did You Know?",
-                "prompt": "Tell me a fun fact in 50 words that is suitable for children below 12",
+                "prompt": "Tell me a fun fact in 50 words.",
             },
             {
                 "title": "All About Animals",
-                "prompt": "Tell me an interesting fact about an animal in {} in 50 words that is suitable for children below 12".format(
+                "prompt": "Tell me an interesting fact about an animal in {} in 50 words.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "All About Countries",
-                "prompt": "Tell me an interesting fact about the country {} in 50 words that is suitable for children below 12".format(
+                "prompt": "Tell me an interesting fact about the country {} in 50 words.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "Famous People",
-                "prompt": "Tell me about a famous historical figure from {} in 50 words that is suitable for children below 12".format(
+                "prompt": "Tell me about a famous historical figure from {} in 50 words.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "Notable Events",
-                "prompt": "Tell me about a notable historical event that happened in {} in 50 words that is suitable for children below 12".format(
+                "prompt": "Tell me about a notable historical event that happened in {} in 50 words.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "Notable World Records",
-                "prompt": "Tell me about a notable world record in 50 words that is suitable for children below 12",
+                "prompt": "Tell me about a notable world record in 50 words.",
             },
         ]
         topic = random.choice(topics)
