@@ -5,6 +5,7 @@ credentials.json and token.pickle in the same folder as this file. If not, run q
 
 from gcal.gcalhelper import GcalHelper
 import logging
+from datetime import datetime
 
 
 class GcalModule:
@@ -34,11 +35,34 @@ class GcalModule:
     def get_events(self, currDate, calendars, calStartDatetime, calEndDatetime, displayTZ, numDays):
         eventList = self.calHelper.retrieve_events(calendars, calStartDatetime, calEndDatetime, displayTZ)
 
+        # Get current time in the display timezone for filtering past events
+        current_time = datetime.now(displayTZ)
+        self.logger.info(f"Current time: {current_time}")
+
+        # Filter out past events (events that have already ended)
+        filtered_events = []
+        for event in eventList:
+            # Keep all-day events and multi-day events
+            if event['allday'] or event['isMultiday']:
+                # For multi-day events, check if they end before current date
+                if event['isMultiday'] and event['endDatetime'].date() < current_time.date():
+                    self.logger.info(f"Skipping past multi-day event: {event['summary']}")
+                    continue
+                filtered_events.append(event)
+            # For regular events, check if they ended before current time
+            elif event['endDatetime'] > current_time:
+                filtered_events.append(event)
+            else:
+                self.logger.info(f"Skipping past event: {event['summary']} (ended at {event['endDatetime']})")
+
+        self.logger.info(f"Filtered {len(eventList) - len(filtered_events)} past events")
+
         # check if event stretches across multiple days
         calList = []
         for i in range(numDays):
             calList.append([])
-        for event in eventList:
+
+        for event in filtered_events:
             idx = self.get_day_in_cal(currDate, event['startDatetime'].date())
             if event['isMultiday']:
                 end_idx = self.get_day_in_cal(currDate, event['endDatetime'].date())
