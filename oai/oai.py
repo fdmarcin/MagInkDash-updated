@@ -9,6 +9,7 @@ import logging
 import random
 import openai
 from openai import OpenAI
+from datetime import datetime
 
 
 class OAIModule:
@@ -17,6 +18,8 @@ class OAIModule:
 
     def get_random_fact(self, curr_date, openai_api_key):
         curr_mth_str = curr_date.strftime("%B")
+        curr_day_str = curr_date.strftime("%d")
+
         # Generate random fact from OpenAI
         topics = [
             {
@@ -50,6 +53,12 @@ class OAIModule:
             {
                 "title": "Notable World Records",
                 "prompt": "Tell me about a notable world record in 50 words.",
+            },
+            {
+                "title": "Today in History",
+                "prompt": "Tell me about a significant historical event that happened on {} {} in 50 words.".format(
+                    curr_mth_str, curr_day_str
+                ),
             },
         ]
         topic = random.choice(topics)
