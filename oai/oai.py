@@ -24,39 +24,39 @@ class OAIModule:
         topics = [
             {
                 "title": "Did You Know?",
-                "prompt": "Tell me a fun fact in 50 words.",
+                "prompt": "Tell me a fun fact in 60 words or less.",
             },
             {
                 "title": "All About Animals",
-                "prompt": "Tell me an interesting fact about an animal in {} in 50 words.".format(
+                "prompt": "Tell me an interesting fact about an animal in {} in 60 words or less.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "All About Countries",
-                "prompt": "Tell me an interesting fact about the country {} in 50 words.".format(
+                "prompt": "Tell me an interesting fact about the country {} in 60 words or less.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "Famous People",
-                "prompt": "Tell me about a famous historical figure from {} in 50 words.".format(
+                "prompt": "Tell me about a famous historical figure from {} in 60 words or less.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "Notable Events",
-                "prompt": "Tell me about a notable historical event that happened in {} in 50 words.".format(
+                "prompt": "Tell me about a notable historical event that happened in {} in 60 words or less.".format(
                     self.get_country()[1]
                 ),
             },
             {
                 "title": "Notable World Records",
-                "prompt": "Tell me about a notable world record in 50 words.",
+                "prompt": "Tell me about a notable world record in 60 words or less.",
             },
             {
                 "title": "Today in History",
-                "prompt": "Tell me about a significant historical event that happened on {} {} in 50 words.".format(
+                "prompt": "Tell me about a significant historical event that happened on {} {} in 60 words or less.".format(
                     curr_mth_str, curr_day_str
                 ),
             },
