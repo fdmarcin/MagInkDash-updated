@@ -1,5 +1,6 @@
 # Personal project files
-token.pickle
+gcal/token.*
+gcal/credentials.json
 render/dashboard.html
 render/dashboard.png
 
