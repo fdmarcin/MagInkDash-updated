@@ -143,7 +143,7 @@ class RenderHelper:
             if len(event_list[i]) > 0:
                 cal_events_text = ""
             else:
-                cal_events_text = '<div class="event"><span class="event-time">None</span></div>'
+                cal_events_text = '<div class="event"><span class="event-time">Nothing to do!</span></div>'
             for event in event_list[i]:
                 cal_events_text += '<div class="event">'
                 if event["isMultiday"] or event["allday"]:
