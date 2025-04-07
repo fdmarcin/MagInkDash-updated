@@ -106,6 +106,12 @@ Some features of the dashboard:
    python3 quickstart.py
    ```
 
+   If you can't authorize the app in the browser:
+
+   - Clear your browser cache and cookies or paste the authorization URL in an incognito window.
+   - If you run the script while connected to the RPi through SSH and open the URL on your local machine, the final redirect likely fails.
+     You should do it on the same machine.
+
 1. Fill out the config file [`config.json`](./config.json):
 
    - `displayTZ`: Set to your timezone. Use the [TZ identifier format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
@@ -232,6 +238,39 @@ Some features of the dashboard:
 ![20230412_215020](https://user-images.githubusercontent.com/5581989/231484068-aa6ce877-1e0a-49fe-b47e-7c024752f42c.JPG)
 
 Selfie and family portrait together with the MagInkCal
+
+## Troubleshooting
+
+### Google Calendar token expired or was revoked
+
+If a long time has passed since you configured access to Google Calendar, you can get this error when running the script.
+
+Prerequisites:
+
+- Either boot RaspberryPi in graphical mode or do it in the repo copy on your PC.
+  - If doing this on your PC, make sure to install the `pip3` dependencies and move `credentials.json` to the `gcal` folder.
+
+To fix this:
+
+1. Go to the `gcal` folder.
+1. Delete `token.pickle`: `rm token.pickle`.
+1. Run the following command:
+
+   ```bash
+   python3 quickstart.py
+   ```
+
+   A web browser should appear, asking you to sign into Google and grant access to your calendar.
+   Once done, you should see a `token.pickle` file in your `gcal` folder.
+
+If you can't authorize the app in the browser:
+
+- Clear your browser cache and cookies or paste the authorization URL in an incognito window.
+- If you run the script while connected to the RPi through SSH and open the URL on your local machine, the final redirect likely fails.
+  You should do it on the same machine.
+- Create a new [Calendar API client](https://console.cloud.google.com/auth/clients) and configure it as "Desktop app".
+  Save the generated JSON file as `credentials.json` like before and follow the troubleshooting steps again.
+- Add your email address under [Test users](https://console.cloud.google.com/auth/audience).
 
 ## Acknowledgements
 
