@@ -243,11 +243,15 @@ Selfie and family portrait together with the MagInkCal
 
 ### Google Calendar token expired or was revoked
 
-If a long time has passed since you configured access to Google Calendar, you can get this error when running the script.
+One disdvantage of creating a Google Cloud app whose publishing status is **Testing**, is that
+[your token expires after 7 days](https://support.google.com/cloud/answer/15549945?sjid=5497909174448144541-EU#publishing-status&zippy=%2Ctesting).
+You will get this error when running the script.
+
+You could consider [publishing your app](https://support.google.com/cloud/answer/15549945?sjid=5497909174448144541-EU#publishing-status&zippy=%2Cin-production).
 
 Prerequisites:
 
-- Either boot RaspberryPi in graphical mode or do it in the repo copy on your PC.
+- Either boot RaspberryPi in graphical mode or do it in the copy of the repository on your PC.
   - If doing this on your PC, make sure to install the `pip3` dependencies and move `credentials.json` to the `gcal` folder.
 
 To fix this:
