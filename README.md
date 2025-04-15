@@ -247,7 +247,7 @@ One disdvantage of creating a Google Cloud app whose publishing status is **Test
 [your token expires after 7 days](https://support.google.com/cloud/answer/15549945?sjid=5497909174448144541-EU#publishing-status&zippy=%2Ctesting).
 You will get this error when running the script.
 
-You could consider [publishing your app](https://support.google.com/cloud/answer/15549945?sjid=5497909174448144541-EU#publishing-status&zippy=%2Cin-production).
+You could consider [publishing your app](https://daniel.es/blog/publishing-your-google-cloud-project-app-ask-for-your-google-app-to-be-published/).
 
 Prerequisites:
 
