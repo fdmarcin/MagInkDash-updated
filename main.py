@@ -1,7 +1,7 @@
 """
 This project is designed for the Inkplate 10 display. However, since the server code is only generating an image, it can
 be easily adapted to other display sizes and resolution by adjusting the config settings, HTML template and
-CSS stylesheet. This code is heavily adapted from my other project (MagInkCal) so do take a look at it if you're keen.
+CSS stylesheet.
 As a dashboard, there are many other things that could be displayed, and it can be done as long as you are able to
 retrieve the information. So feel free to change up the code and amend it to your needs.
 """
@@ -15,8 +15,8 @@ from datetime import datetime as dt
 from pytz import timezone
 from gcal.gcal import GcalModule
 from owm.owm import OWMModule
-from oai.oai import OAIModule
 from render.render import RenderHelper
+
 
 
 if __name__ == '__main__':
@@ -27,8 +27,9 @@ if __name__ == '__main__':
     config = json.load(configFile)
 
     calendars = config['calendars'] # Google Calendar IDs
+    maxTotalEvents = config.get('maxTotalEvents', 20)
+    maxEventsPerDay = config.get('maxEventsPerDay', 8)
     displayTZ = timezone(config['displayTZ']) # list of timezones - print(pytz.all_timezones)
-    numCalDaysToShow = config['numCalDaysToShow'] # Number of days to retrieve from gcal, keep to 3 unless other parts of the code are changed too
     imageWidth = config['imageWidth']  # Width of image to be generated for display.
     imageHeight = config['imageHeight']  # Height of image to be generated for display.
     rotateAngle = config['rotateAngle']  # If image is rendered in portrait orientation, angle to rotate to fit screen
@@ -36,7 +37,6 @@ if __name__ == '__main__':
     lat = config["lat"] # Latitude in decimal of the location to retrieve weather forecast for
     lon = config["lon"] # Longitude in decimal of the location to retrieve weather forecast for
     owm_api_key = config["owm_api_key"]  # OpenWeatherMap API key. Required to retrieve weather forecast.
-    openai_api_key = config["openai_api_key"]  # OpenAI API key. Required to retrieve response from ChatGPT
     path_to_server_image = config["path_to_server_image"]  # Location to save the generated image
 
     # Create and configure logger
@@ -51,23 +51,20 @@ if __name__ == '__main__':
     owmModule = OWMModule()
     current_weather, hourly_forecast, daily_forecast = owmModule.get_weather(lat, lon, owm_api_key)
 
-    # Retrieve Calendar Data
+    # Retrieve Calendar Data - get up to 7 days initially
     currDate = dt.now(displayTZ).date()
+    maxDaysToRetrieve = 7  # Get a week's worth of events
     calStartDatetime = displayTZ.localize(dt.combine(currDate, dt.min.time()))
-    calEndDatetime = displayTZ.localize(dt.combine(currDate + datetime.timedelta(days=numCalDaysToShow-1), dt.max.time()))
+    calEndDatetime = displayTZ.localize(dt.combine(currDate + datetime.timedelta(days=maxDaysToRetrieve-1), dt.max.time()))
     calModule = GcalModule()
-    eventList = calModule.get_events(
+    allEventList = calModule.get_events(
         currDate,
         calendars,
         calStartDatetime,
         calEndDatetime,
         displayTZ,
-        numCalDaysToShow,
+        maxDaysToRetrieve,
     )
-
-    # Retrieve Random Fact from OpenAI
-    oaiModule = OAIModule()
-    topic = oaiModule.get_random_fact(currDate, openai_api_key)
 
     # Render Dashboard Image
     renderService = RenderHelper(imageWidth, imageHeight, rotateAngle, timeFormat)
@@ -76,10 +73,10 @@ if __name__ == '__main__':
         current_weather,
         hourly_forecast,
         daily_forecast,
-        eventList,
-        numCalDaysToShow,
-        topic,
+        allEventList,
         path_to_server_image,
+        maxEventsPerDay,
+        maxTotalEvents,
     )
 
     # Get absolute path to the generated image

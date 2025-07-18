@@ -121,17 +121,80 @@ class RenderHelper:
 
         return datetime_str
 
+    def calculate_optimal_days(self, all_event_list, max_events_per_day=8, max_total_events=20):
+        """
+        Calculate the optimal number of days to display based on available events
+        and estimated space constraints.
+
+        Args:
+            all_event_list: List of event lists for each day
+            max_events_per_day: Maximum events that fit comfortably in one day
+            max_total_events: Maximum total events that fit in the calendar area
+
+        Returns:
+            int: Optimal number of days to display (1-7)
+        """
+        if not all_event_list or len(all_event_list) == 0:
+            return 1  # Show at least today even if no events
+
+        total_events = 0
+        optimal_days = 1
+
+        for day_index, day_events in enumerate(all_event_list):
+            if day_index >= 7:  # Don't go beyond a week
+                break
+
+            day_event_count = len(day_events)
+
+            # If this day has no events and we already have some days, consider stopping
+            if day_event_count == 0 and day_index >= 2:
+                # Only add empty days if we have very few events so far
+                if total_events < 5:
+                    optimal_days = day_index + 1
+                    continue
+                else:
+                    break
+
+            # If adding this day would exceed our limits, stop
+            if (total_events + day_event_count > max_total_events or
+                day_event_count > max_events_per_day):
+                break
+
+            total_events += day_event_count
+            optimal_days = day_index + 1
+
+            # If we have a good amount of events, don't go beyond 3 days
+            if total_events >= 12 and optimal_days >= 3:
+                break
+
+        # Ensure we show at least today and tomorrow if tomorrow has events
+        if optimal_days == 1 and len(all_event_list) > 1 and len(all_event_list[1]) > 0:
+            optimal_days = 2
+
+        # Cap at 3 days maximum for layout reasons
+        optimal_days = min(optimal_days, 3)
+
+        self.logger.info(f"Calculated optimal days to show: {optimal_days} (total events: {total_events})")
+
+        return optimal_days
+
     def process_inputs(
         self,
         current_date,
         current_weather,
         hourly_forecast,
         daily_forecast,
-        event_list,
-        num_cal_days,
-        topic,
+        all_event_list,  # Now receives all events
         path_to_server_image,
+        max_events_per_day=8,
+        max_total_events=20,
     ):
+        # Determine optimal number of days to show based on events
+        optimal_days = self.calculate_optimal_days(all_event_list)
+
+        # Use only the events for the optimal number of days
+        event_list = all_event_list[:optimal_days]
+        num_cal_days = optimal_days
 
         # Read html template
         with open(self.currPath + '/dashboard_template.html', 'r') as file:
@@ -228,8 +291,6 @@ class RenderHelper:
             "col_today_width": col_today_width,
             "tomorrow_vis_class": tomorrow_vis_class,
             "dayafter_vis_class": dayafter_vis_class,
-            "topic_title": topic["title"],
-            "topic_text": topic["text"],
         }
 
         # Add day 2 params

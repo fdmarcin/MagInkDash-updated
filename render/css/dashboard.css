@@ -13,7 +13,45 @@
         width: 50%;
     }
 
+    .col-md-8 {
+        width: 66.666667%;
+    }
+
     .col-md-12 {
         width: 100%;
     }
+}
+
+/* Enhanced calendar event styling for expanded layout */
+.event {
+    margin-bottom: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.event:last-child {
+    border-bottom: none;
+}
+
+.event-time {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Improved spacing for calendar sections */
+.tomorrow-events, .dayafter-events {
+    margin-top: 20px;
+}
+
+/* Better typography for expanded calendar */
+.calendar-events h2 {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+/* Optimize for larger calendar content */
+.list-unstyled {
+    max-height: none; /* Remove any height restrictions */
+    overflow: visible;
 }

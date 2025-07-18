@@ -2,8 +2,8 @@
 
 This repo contains the code needed to drive an e-ink magic dashboard that uses a Raspberry Pi to:
 
-- Automatically retrieve updated content from Google Calendar, OpenWeatherMap and OpenAI ChatGPT
-- Format it into the desired layout
+- Automatically retrieve updated content from Google Calendar and OpenWeatherMap.
+- Format it into the desired layout.
 - Serve it to a battery-powered e-ink display (Inkplate 10).
 
 > [!NOTE]
@@ -27,7 +27,7 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 
 ## How it works
 
-1. A `cron` job on RPi triggers a Python script to run every hour to fetch calendar events from Google Calendar, weather forecast from OpenWeatherMap and random factoids from OpenAI's ChatGPT.
+1. A `cron` job on RPi triggers a Python script to run every hour to fetch calendar events from Google Calendar and weather forecast from OpenWeatherMap.
 1. The retrieved content is then formatted into the desired layout and saved as an image.
 1. An Apache server on the RPi hosts this image such that it can be accessed by the Inkplate 10.
 1. On the Inkplate 10, the corresponding script then connects to the RPi server on the local network
@@ -39,19 +39,14 @@ Some features of the dashboard:
 - **Battery Life**:
 
   As with similar battery powered devices, the biggest question is the battery life. I'm currently using a 1500mAh battery on the Inkplate 10 and based on current usage, it should last me around 3-4 months. With the 3000mAh that comes with the manufacturer assembled Inkplate 10, we could potentially be looking at 6-8 month battery life. With this crazy battery life, there are much more options available. Perhaps solar power for unlimited battery life? Or reducing the refresh interval to 15 or 30min to increase the information timeliness?
+
 - **Calendar and Weather**:
 
   I'm currently displaying calendar events and weather forecast for current day and the upcoming two days.
   No real reason other than the desire to know what my weekend looks like on a Friday, and therefore helping me to better plan my weekend.
   Unfortunately, if you have a busy calendar with numerous events on a single day, the space on the dashboard is consumed very quickly.
   If so, you might wish to modify the code to reduce/limit the number of days/events to be displayed by setting `"numCalDaysToShow"` in `config.json` to a different value.
-- **OpenAI ChatGPT**:
 
-  AI is everywhere now.
-  There's a section in the dashboard to retrieve ChatGPT responses via OpenAI's API (free but you have to spend minimum 5 USD on credit).
-  So far I'm using it to retrieve factoids on animals, historical figures, notable events, countries, world records, etc.
-  The prompts fed to ChatGPT can certainly be customised, so please knock yourself out and think of the most outrageous things you can put on your dashboard.
-  Note that you might have to test and adjust the prompts/parameters, else ChatGPT might return fairly repetitive responses, for example, on Abraham Lincoln, Rosa Parks, Martin Luther King.
 - **Telegram Bot**:
 
   Although the battery life is crazy long on the Inkplate 10, I still wish to be notified when the battery runs low.
@@ -85,7 +80,7 @@ Some features of the dashboard:
    sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
    sudo apt install apache2 -y
    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-   pip3 install pytz selenium Pillow openai
+   pip3 install pytz selenium Pillow
    sudo chown pi:www-data /var/www/html
    sudo chmod 755 /var/www/html
    ```
@@ -118,15 +113,13 @@ Some features of the dashboard:
    - `calendars`: `primary` is your main calendar.
      To add more, get their IDs from Google Calendar settings.
      For example: `["primary", "example@import.calendar.google.com"]`
-   - `numCalDaysToShow`: Set to `1`, `2`, or `3`.
+   - `max_events_per_day` and `max_total_events` to limit the maximum of events shown.
    - `timeFormat`: To format calendar times using the 24-hour clock, change the value to `24`.
    - `owm_api_key`: Enter your OpenWeatherMap API key.
      I used the "Pay as you call" [One Call API 3.0](https://openweathermap.org/api).
    - `lat` and `lon`: Set to your location's latitude and longitude for weather.
    - `imageWidth` and `imageHeight` should match the resolution of your display.
      `1200` and `825` match Inkplate 10.
-   - `openai_api_key`: Enter your [OpenAI API key](https://platform.openai.com/settings/organization/api-keys).
-     I paid 5 USD to get into the [Usage tier 1](https://platform.openai.com/settings/organization/limits) and get free requests.
 
 1. The script to generate the dashboard should work now!
    To test it manually, run the following in the `MagInkDash-updated` folder:
@@ -295,12 +288,7 @@ It's much more polished and also actively developed.
 
 What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 
-- OpenAI API integration
-  - Migrated from the deprecated `openai.Completion.create()` method to the modern client-based approach using `from openai import OpenAI`.
-  - Updated from the deprecated `text-davinci-003` model to `gpt-3.5-turbo`.
-  - Modified the prompt format to use the required chat completion format with messages array.
-  - Updated response parsing to match the new API structure.
-  - Drop request to make fun facts suitable for children below 12.
+- Deleted OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia))
 - OpenWeatherMap API
   - Improved error handling and logging for weather data retrieval.
   - Added robust defaults for missing or incomplete weather data.
