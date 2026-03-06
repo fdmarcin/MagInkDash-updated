@@ -13,6 +13,11 @@
     src: url('../font/TiltWarp-Regular.ttf');
 }
 
+@font-face {
+    font-family: "Noto Emoji";
+    src: url('../font/NotoEmoji-VariableFont_wght.ttf');
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +26,7 @@
 
 body {
     background: #fff;
-    font-family: "Lexend-Regular", sans-serif;
+    font-family: "Lexend-Regular", "Noto Emoji", sans-serif;
     width: 1200px;
     height: 825px;
     overflow: hidden;
@@ -29,7 +34,7 @@ body {
 }
 
 h1, h2, p, span, .h1, .h2, .p, .span {
-    font-family: "Lexend-Regular", sans-serif;
+    font-family: "Lexend-Regular", "Noto Emoji", sans-serif;
 }
 
 .list-unstyled {
