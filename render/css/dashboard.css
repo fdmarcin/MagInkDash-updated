@@ -65,10 +65,12 @@
 
 .dashboard-divider {
     width: 8px;
-    height: 80vh;
-    min-height: 500px;
+    height: 80%;
+    max-height: 700px;
+    min-height: 350px;
     background: #b5b5b5;
     border-radius: 4px;
+    margin: auto 0;
 }
 
 .divider-col {
