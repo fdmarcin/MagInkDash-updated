@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="css/weather-icons.min.css">
+
         <link rel="stylesheet" href="css/dashboard.css">
     </head>
     <body style="background: white;">
         <div class="container">
-            <!-- Calendar -->
+            <!-- Calendar - Expand -->
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="row">
@@ -31,12 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12 text-center">
-                            <i class="wi wi-owm-{current_weather_id}" style="font-size: 25rem"></i>
-                        </div>
-                    </div>
-                    <div class="row align-items-start ">
+                             <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 30px"></div>
                     </div>
                     <div class="row align-items-start ">
@@ -46,51 +41,6 @@
                     </div>
                     <div class="row align-items-start ">
                         <div class="col-md-12"  style="height: 20px"></div>
-                    </div>
-
-                    <!-- Weather forecast section -->
-                    <div class="row align-items-start weather-forecast">
-                        <!-- Today's weather -->
-                        <div class="today-column col-md-{col_today_width}">
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <i class="wi wi-owm-{today_weather_id}" style="font-size: 10rem; color:gray"></i>
-                                </div>
-                            </div>
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <h3>Today<br />{today_weather_pop}% | {today_weather_min}-{today_weather_max}°</h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tomorrow's weather -->
-                        <div class="tomorrow-column col-md-{col_tomorrow_width} {tomorrow_vis_class}">
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <i class="wi wi-owm-{tomorrow_weather_id}" style="font-size: 10rem; color:gray"></i>
-                                </div>
-                            </div>
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <h3>{tomorrow}<br />{tomorrow_weather_pop}% | {tomorrow_weather_min}-{tomorrow_weather_max}°</h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Day after tomorrow's weather -->
-                        <div class="dayafter-column col-md-4 {dayafter_vis_class}">
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <i class="wi wi-owm-{dayafter_weather_id}" style="font-size: 10rem; color:gray"></i>
-                                </div>
-                            </div>
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <h3>{dayafter}<br />{dayafter_weather_pop}% | {dayafter_weather_min}-{dayafter_weather_max}°</h3>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row align-items-start ">
