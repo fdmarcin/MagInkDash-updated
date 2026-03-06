@@ -21,7 +21,7 @@
 
 body {
     background: #fff;
-    font-family: "Lexend-Regular", "Noto Color Emoji", sans-serif;
+    font-family: "Lexend-Regular", "Noto Emoji", sans-serif;
     width: 1200px;
     height: 825px;
     overflow: hidden;
@@ -29,7 +29,7 @@ body {
 }
 
 h1, h2, p, span, .h1, .h2, .p, .span {
-    font-family: "Lexend-Regular", "Noto Color Emoji", sans-serif;
+    font-family: "Lexend-Regular", "Noto Emoji", sans-serif;
 }
 
 .list-unstyled {
