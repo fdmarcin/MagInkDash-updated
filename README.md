@@ -108,7 +108,7 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
 
    ```bash
    sudo apt update
-   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev fonts-noto-color-emoji
+   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
    sudo apt install apache2 -y
    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
    pip3 install pytz selenium

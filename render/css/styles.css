@@ -13,6 +13,11 @@
     src: url('../font/TiltWarp-Regular.ttf');
 }
 
+@font-face {
+    font-family: "Noto Emoji";
+    src: url('../font/NotoEmoji-VariableFont_wght.ttf');
+}
+
 * {
     margin: 0;
     padding: 0;
