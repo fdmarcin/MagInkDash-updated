@@ -101,23 +101,24 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    sudo raspi-config
    ```
 
-1. Run the following commands in the RPi Terminal to setup the environment to run the Python scripts and function as a web server.
+1. Run the following commands in the RPi Terminal to set up the environment to run the Python scripts and function as a web server.
    It'll take some time so be patient here.
 
-   If you changed your username during `raspi-config`, in the `chown` command change `pi` to use your username.
+   If you changed your username during `raspi-config`, in the `chown` command, change `pi` to use your username.
 
    ```bash
    sudo apt update
-   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
+   sudo apt install -y chromium-chromedriver libopenjp2-7-dev
    sudo apt install apache2 -y
-   pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-   pip3 install pytz selenium
    sudo chown pi:www-data /var/www/html
    sudo chmod 755 /var/www/html
    ```
 
-1. Optional. Install [`mise`](https://mise.jdx.dev/installing-mise.html) for dependency management.
+1. Install [`mise`](https://mise.jdx.dev/installing-mise.html) for dependency management.
+   If you don't want to use mise, you should be able to figure out the installation from `requirements.txt`.
+
 1. Download the files in this repo to a folder in your PC.
+
 1. To access your Google Calendar events, it's necessary to first grant the access.
    Follow [Google's Python quick start](https://developers.google.com/calendar/api/quickstart/python)
    on your PC to get the `credentials.json` file from your Google API.
@@ -130,6 +131,9 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    Once done, you should see a `token.pickle` file in your `gcal` folder.
 
    ```bash
+   mise trust
+   mise install
+   pip install -r requirements.txt
    python3 quickstart.py
    ```
 
