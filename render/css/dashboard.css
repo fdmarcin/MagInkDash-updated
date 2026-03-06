@@ -64,7 +64,7 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-top: 3px;
-    color: #555;
+    color: #000;
 }
 
 /* Events */
@@ -87,7 +87,7 @@
 
 .event.allday {
     border-left: none;
-    border: 2px solid #000;
+    border: 2px dashed #000;
     border-radius: 4px;
     padding: 8px 14px;
     white-space: normal;
@@ -98,7 +98,7 @@
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #555;
+    color: #000;
     margin-bottom: 3px;
 }
 

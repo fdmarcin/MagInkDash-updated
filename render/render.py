@@ -219,7 +219,7 @@ class RenderHelper:
                 if allday_events:
                     cal_events_text += '<li class="event allday"><div class="event-time">All day</div>'
                     for e in allday_events:
-                        cal_events_text += '<div class="event-title">' + e['summary'] + '</div>'
+                        cal_events_text += '<div class="event-title">• ' + e['summary'] + '</div>'
                     cal_events_text += '</li>\n'
 
                 for event in timed_events:
