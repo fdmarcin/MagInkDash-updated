@@ -1,4 +1,5 @@
 # Personal project files
+config.json
 gcal/token.*
 gcal/credentials.json
 render/dashboard.html

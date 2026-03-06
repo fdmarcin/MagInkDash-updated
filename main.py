@@ -14,7 +14,6 @@ import os
 from datetime import datetime as dt
 from pytz import timezone
 from gcal.gcal import GcalModule
-from owm.owm import OWMModule
 from render.render import RenderHelper
 
 
@@ -34,9 +33,6 @@ if __name__ == '__main__':
     imageHeight = config['imageHeight']  # Height of image to be generated for display.
     rotateAngle = config['rotateAngle']  # If image is rendered in portrait orientation, angle to rotate to fit screen
     timeFormat = config.get('timeFormat', 12)  # 12 or 24-hour time format, default to 12 if not specified
-    lat = config["lat"] # Latitude in decimal of the location to retrieve weather forecast for
-    lon = config["lon"] # Longitude in decimal of the location to retrieve weather forecast for
-    owm_api_key = config["owm_api_key"]  # OpenWeatherMap API key. Required to retrieve weather forecast.
     path_to_server_image = config["path_to_server_image"]  # Location to save the generated image
 
     # Create and configure logger
@@ -46,10 +42,6 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
     logger.info("Starting dashboard update")
     logger.info(f"Using {'24' if timeFormat == 24 else '12'}-hour time format")
-
-    # Retrieve Weather Data
-    owmModule = OWMModule()
-    current_weather, hourly_forecast, daily_forecast = owmModule.get_weather(lat, lon, owm_api_key)
 
     # Retrieve Calendar Data - get up to 7 days initially
     currDate = dt.now(displayTZ).date()
@@ -70,9 +62,6 @@ if __name__ == '__main__':
     renderService = RenderHelper(imageWidth, imageHeight, rotateAngle, timeFormat)
     renderService.process_inputs(
         currDate,
-        current_weather,
-        hourly_forecast,
-        daily_forecast,
         allEventList,
         path_to_server_image,
         maxEventsPerDay,

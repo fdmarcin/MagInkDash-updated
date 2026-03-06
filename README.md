@@ -5,7 +5,7 @@
 
 This repo contains the code needed to drive an e-ink magic dashboard that uses a Raspberry Pi to:
 
-- Automatically retrieve updated content from Google Calendar and OpenWeatherMap.
+- Automatically retrieve updated content from Google Calendar.
 - Format it into the desired layout.
 - Serve it to a battery-powered e-ink display (Inkplate 10).
 
@@ -26,7 +26,7 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 
 ## How it works
 
-1. A `cron` job on RPi triggers a Python script to run every hour to fetch calendar events from Google Calendar and weather forecast from OpenWeatherMap.
+1. A `cron` job on RPi triggers a Python script to run every hour to fetch calendar events from Google Calendar.
 1. The retrieved content is then formatted into the desired layout and saved as an image.
 1. An Apache server on the RPi hosts this image such that it can be accessed by the Inkplate 10.
 1. On the Inkplate 10, the corresponding script then connects to the RPi server on the local network
@@ -39,9 +39,9 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 
   As with similar battery powered devices, the biggest question is the battery life. I'm currently using a 1500mAh battery on the Inkplate 10 and based on current usage, it should last me around 3-4 months. With the 3000mAh that comes with the manufacturer assembled Inkplate 10, we could potentially be looking at 6-8 month battery life. With this crazy battery life, there are much more options available. Perhaps solar power for unlimited battery life? Or reducing the refresh interval to 15 or 30min to increase the information timeliness?
 
-- **Calendar and Weather**:
+- **Calendar**:
 
-  I'm currently displaying calendar events and weather forecast for current day and the upcoming two days.
+  I'm currently displaying calendar events for the current day and upcoming days.
   No real reason other than the desire to know what my weekend looks like on a Friday, and therefore helping me to better plan my weekend.
   Unfortunately, if you have a busy calendar with numerous events on a single day, the space on the dashboard is consumed very quickly.
   If so, you might wish to modify the code to reduce/limit the number of days/events to be displayed by setting `"numCalDaysToShow"` in `config.json` to a different value.
@@ -57,11 +57,8 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 
 What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 
-- Deleted OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia), not actively maintained)
-- OpenWeatherMap API
-  - Improved error handling and logging for weather data retrieval.
-  - Added robust defaults for missing or incomplete weather data.
-  - Ensured compatibility with the current One Call API (v3.0).
+- Dropped OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia), not actively maintained)
+- Dropped OpenWeatherMap API integration (if you want to use it, see branch [`calendar-with-weather`](https://github.com/fdmarcin/MagInkDash-updated/tree/calendar-with-weather), not actively maintained)
 - Google Calendar API
   - Fix for displaying 2 or 1 calendar days.
   - Added a configurable 12/24-hour time format option in `config.json`.
@@ -114,11 +111,12 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
    sudo apt install apache2 -y
    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-   pip3 install pytz selenium Pillow
+   pip3 install pytz selenium
    sudo chown pi:www-data /var/www/html
    sudo chmod 755 /var/www/html
    ```
 
+1. Optional. Install [`mise`](https://mise.jdx.dev/installing-mise.html) for dependency management.
 1. Download the files in this repo to a folder in your PC.
 1. To access your Google Calendar events, it's necessary to first grant the access.
    Follow [Google's Python quick start](https://developers.google.com/calendar/api/quickstart/python)
@@ -141,6 +139,7 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    - If you run the script while connected to the RPi through SSH and open the URL on your local machine, the final redirect likely fails.
      You should do it on the same machine.
 
+1. Copy the config file `config-example.json` and name the new one `config.json`.
 1. Fill out the config file [`config.json`](./config.json):
 
    - `displayTZ`: Set to your timezone. Use the [TZ identifier format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
@@ -149,9 +148,6 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
      For example: `["primary", "example@import.calendar.google.com"]`
    - `max_events_per_day` and `max_total_events` to limit the maximum of events shown.
    - `timeFormat`: To format calendar times using the 24-hour clock, change the value to `24`.
-   - `owm_api_key`: Enter your OpenWeatherMap API key.
-     I used the "Pay as you call" [One Call API 3.0](https://openweathermap.org/api).
-   - `lat` and `lon`: Set to your location's latitude and longitude for weather.
    - `imageWidth` and `imageHeight` should match the resolution of your display.
      `1200` and `825` match Inkplate 10.
 
@@ -301,7 +297,7 @@ If you can't authorize the app in the browser:
 
 - [Lexend Font](https://fonts.google.com/specimen/Lexend) and [Tilt Warp Font](https://fonts.google.com/specimen/Tilt+Warp): Fonts used for the dashboard display.
 - [Bootstrap](https://getbootstrap.com/): Styling toolkit to customise the look of the dashboard.
-- [Weather Icons](https://erikflowers.github.io/weather-icons/): Icons used for displaying of weather forecast information.
+- Streamlined project to focus on calendar events.
 - [Freepik](https://www.freepik.com/): For the background image used in this dashboard.
 - [speedyg0nz](https://github.com/speedyg0nz): For [the original project](https://github.com/speedyg0nz/MagInkDash).
 

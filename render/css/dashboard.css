@@ -1,57 +1,117 @@
-/* Additional CSS for the dashboard */
-.hidden {
-    display: none !important;
+.screen {
+    width: 1200px;
+    height: 825px;
+    padding: 10px;
 }
 
-/* Responsive column handling */
-@media (min-width: 768px) {
-    .col-md-4 {
-        width: 33.333333%;
-    }
-
-    .col-md-6 {
-        width: 50%;
-    }
-
-    .col-md-8 {
-        width: 66.666667%;
-    }
-
-    .col-md-12 {
-        width: 100%;
-    }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 2px solid #000;
+    border-radius: 24px;
+    overflow: hidden;
+    height: 100%;
 }
 
-/* Enhanced calendar event styling for expanded layout */
+.day-col {
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #000;
+}
+
+.day-col:last-child {
+    border-right: none;
+}
+
+/* Header */
+
+.day-header {
+    position: relative;
+    padding: 16px 20px 12px;
+    border-bottom: 2px solid #000;
+}
+
+.today-label {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-family: "Lexend-Regular", sans-serif;
+    font-size: 17px;
+    font-variant: small-caps;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+}
+
+.day-name {
+    font-family: "Lexend-Regular", sans-serif;
+    font-size: 22px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.day-number {
+    font-family: "Lexend-Regular", sans-serif;
+    font-size: 96px;
+    font-weight: bold;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.day-month {
+    font-family: "Lexend-Regular", sans-serif;
+    font-size: 19px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 3px;
+    color: #000;
+}
+
+/* Events */
+
+.events {
+    flex: 1;
+    overflow: hidden;
+    padding: 12px 0;
+}
+
 .event {
-    margin-bottom: 8px;
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 9px 18px;
+    margin: 8px 12px;
+    border-left: 3px solid #000;
+    font-family: "Lexend-Regular", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.event:last-child {
-    border-bottom: none;
+.event.allday {
+    border-left: none;
+    border: 2px dashed #000;
+    border-radius: 4px;
+    padding: 8px 14px;
+    white-space: normal;
 }
 
 .event-time {
-    font-weight: bold;
-    color: #333;
+    font-family: "Lexend-Light", sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #000;
+    margin-bottom: 3px;
 }
 
-/* Improved spacing for calendar sections */
-.tomorrow-events, .dayafter-events {
-    margin-top: 20px;
+.event.allday .event-time {
+    font-size: 15px;
 }
 
-/* Better typography for expanded calendar */
-.calendar-events h2 {
-    margin-bottom: 15px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
+.event-title {
+    font-family: "Lexend-Regular", sans-serif;
+    font-size: 23px;
+    line-height: 1.3;
 }
 
-/* Optimize for larger calendar content */
-.list-unstyled {
-    max-height: none; /* Remove any height restrictions */
-    overflow: visible;
+.event.allday .event-title {
+    font-size: 22px;
 }

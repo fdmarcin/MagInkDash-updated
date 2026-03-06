@@ -6,148 +6,46 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="css/weather-icons.min.css">
         <link rel="stylesheet" href="css/dashboard.css">
     </head>
-    <body style="background: white;">
-        <div class="container">
-            <!-- Calendar -->
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 date-padding">
-                                    <div class="text-right">
-                                        <p class="big-day">{day}</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 date-padding">
-                                    <div class="col-md-12"  style="height: 130px"></div>
-                                    <div>
-                                        <p style="font-size: 2.5rem">{weekday}<br />{month}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12 text-center">
-                            <i class="wi wi-owm-{current_weather_id}" style="font-size: 25rem"></i>
-                        </div>
-                    </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 30px"></div>
-                    </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12 text-center">
-                            <h2>{current_weather_text} | {current_weather_temp}°</h2>
-                        </div>
-                    </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 20px"></div>
-                    </div>
+    <body>
+        <div class="screen">
+            <div class="grid">
 
-                    <!-- Weather forecast section -->
-                    <div class="row align-items-start weather-forecast">
-                        <!-- Today's weather -->
-                        <div class="today-column col-md-{col_today_width}">
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <i class="wi wi-owm-{today_weather_id}" style="font-size: 10rem; color:gray"></i>
-                                </div>
-                            </div>
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <h3>Today<br />{today_weather_pop}% | {today_weather_min}-{today_weather_max}°</h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tomorrow's weather -->
-                        <div class="tomorrow-column col-md-{col_tomorrow_width} {tomorrow_vis_class}">
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <i class="wi wi-owm-{tomorrow_weather_id}" style="font-size: 10rem; color:gray"></i>
-                                </div>
-                            </div>
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <h3>{tomorrow}<br />{tomorrow_weather_pop}% | {tomorrow_weather_min}-{tomorrow_weather_max}°</h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Day after tomorrow's weather -->
-                        <div class="dayafter-column col-md-4 {dayafter_vis_class}">
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <i class="wi wi-owm-{dayafter_weather_id}" style="font-size: 10rem; color:gray"></i>
-                                </div>
-                            </div>
-                            <div class="row align-items-start ">
-                                <div class="col-md-12 text-center">
-                                    <h3>{dayafter}<br />{dayafter_weather_pop}% | {dayafter_weather_min}-{dayafter_weather_max}°</h3>
-                                </div>
-                            </div>
-                        </div>
+                <div class="day-col">
+                    <div class="day-header">
+                        <div class="today-label">Today</div>
+                        <div class="day-name">{weekday}</div>
+                        <div class="day-number">{day}</div>
+                        <div class="day-month">{month}</div>
                     </div>
-
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 50px"></div>
-                    </div>
+                    <ol class="events list-unstyled">
+                        {events_today}
+                    </ol>
                 </div>
 
-                <!-- Calendar events section - EXPANDED -->
-                <div class="col-md-6">
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 50px"></div>
+                <div class="day-col">
+                    <div class="day-header">
+                        <div class="day-name">{tomorrow}</div>
+                        <div class="day-number">{tomorrow_day}</div>
+                        <div class="day-month">{tomorrow_month}</div>
                     </div>
-
-                    <!-- Today's events -->
-                    <div class="row align-items-start ">
-                        <div class="col-md-12">
-                            <h2>Today</h2>
-                            <ol class="list-unstyled">
-                                {events_today}
-                            </ol>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 20px"></div>
-                    </div>
-
-                    <!-- Tomorrow's events -->
-                    <div class="row align-items-start tomorrow-events {tomorrow_vis_class}">
-                        <div class="col-md-12">
-                            <h2>{tomorrow}</h2>
-                            <ol class="list-unstyled">
-                                {events_tomorrow}
-                            </ol>
-                        </div>
-                    </div>
-
-                    <!-- Day after spacer - only shown if needed -->
-                    <div class="row align-items-start dayafter-spacer {dayafter_vis_class}">
-                        <div class="col-md-12" style="height: 20px"></div>
-                    </div>
-
-                    <!-- Day after tomorrow's events -->
-                    <div class="row align-items-start dayafter-events {dayafter_vis_class}">
-                        <div class="col-md-12">
-                            <h2>{dayafter}</h2>
-                            <ol class="list-unstyled">
-                                {events_dayafter}
-                            </ol>
-                        </div>
-                    </div>
-
-                    <!-- Additional spacing to fill the freed up space -->
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 50px"></div>
-                    </div>
+                    <ol class="events list-unstyled">
+                        {events_tomorrow}
+                    </ol>
                 </div>
+
+                <div class="day-col">
+                    <div class="day-header">
+                        <div class="day-name">{dayafter}</div>
+                        <div class="day-number">{dayafter_day}</div>
+                        <div class="day-month">{dayafter_month}</div>
+                    </div>
+                    <ol class="events list-unstyled">
+                        {events_dayafter}
+                    </ol>
+                </div>
+
             </div>
         </div>
     </body>
