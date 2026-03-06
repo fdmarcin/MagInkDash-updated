@@ -1,5 +1,8 @@
 # MagInkDash - updated
 
+<!-- markdownlint-disable MD033 -->
+<!-- Inline HTML -->
+
 This repo contains the code needed to drive an e-ink magic dashboard that uses a Raspberry Pi to:
 
 - Automatically retrieve updated content from Google Calendar and OpenWeatherMap.
@@ -9,18 +12,14 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 > [!NOTE]
 > The code has only been tested on the specific hardware mentioned, but can be easily modified to work with other hardware (for both the server or display).
 
-![20230412_214635](https://user-images.githubusercontent.com/5581989/231482915-154db674-9301-465d-8352-d2c4400093eb.JPG)
+![example dashboard on a 10 inch Inkplate screen](img/dashboard-example.jpg)
 
 ## Hardware required
 
-- [Raspberry Pi](https://www.raspberrypi.org/):
-
+- [Raspberry Pi](https://www.raspberrypi.org/) or another PC:
   Used as a server to retrieve content and generate a dashboard for the E-Ink display so any model would do.
-  Personally, I used a Raspberry Pi 3 B+ from 2016 and it works fine for this purpose.
-  In fact, it doesn't even need to be a RPi.
   Any other Single Board Computer, or old computer, or even a cloud service that runs the code would suffice.
 - [Inkplate 10 Battery Powered E-Ink Display](https://soldered.com/product/soldered-inkplate-10-9-7-e-paper-board-with-enclosure-copy/):
-
    Used as a client to display the generated dashboard.
    I went with this because it was an all-in-one with the enclosure and battery included so there's less hardware tinkering.
    But you could certainly go barebones and assemble the different parts yourself from scratch, that is, display, microcontroller, case, and battery.
@@ -34,7 +33,7 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
    via a WiFi connection, retrieves the image and displays it on the E-Ink screen.
 1. The Inkplate 10 then goes to sleep to conserve battery. The dashboard remains displayed on the E-Ink screen, because well, E-Ink...
 
-Some features of the dashboard:
+## Features
 
 - **Battery Life**:
 
@@ -53,7 +52,42 @@ Some features of the dashboard:
   To do so, I set up a Telegram Bot and the Inkplate triggers the bot to send me a message if the measured battery voltage falls below a specified threshold.
   That said, with the bot set up, there's actually much more you could do, for example, send yourself a message when it's to expected to rain in the next hour.
 
-![MagInkDash Features](https://user-images.githubusercontent.com/5581989/231484018-6ff6a883-3226-42c7-a387-fcef7ee9d49c.png)
+<details>
+<summary>Differences from upstream project</summary>
+
+What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
+
+- Deleted OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia), not actively maintained)
+- OpenWeatherMap API
+  - Improved error handling and logging for weather data retrieval.
+  - Added robust defaults for missing or incomplete weather data.
+  - Ensured compatibility with the current One Call API (v3.0).
+- Google Calendar API
+  - Fix for displaying 2 or 1 calendar days.
+  - Added a configurable 12/24-hour time format option in `config.json`.
+- Improved Chromedriver detection
+  - Added smart auto-detection of chromedriver location using `which chromedriver`.
+  - Implemented fallback to common installation locations if auto-detection fails.
+  - Added helpful error messages and logging for troubleshooting.
+  - Enhanced error handling during the screenshot process.
+- Added time format configuration
+  - Implemented time formatting throughout the application that respects the user's preference.
+  - Added graceful handling of missing configuration with sensible defaults.
+- Better output and logging
+  - Added display of the absolute path to the generated image for easier verification.
+  - Improved logging throughout the application.
+  - Added informative messages about time format and other configuration options.
+- General code improvements
+  - Enhanced error handling throughout the codebase.
+  - Added more detailed logging.
+  - Improved resource management (properly closing webdriver with `driver.quit()`).
+  - Added configuration parameters with sensible defaults for better backward compatibility.
+
+These updates make MagInkDash compatible with current APIs, more user-friendly, and more robust in various environments, particularly on headless Raspberry Pi systems.
+
+See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/README.md>.
+
+</details>
 
 ## Setting up
 
@@ -226,12 +260,6 @@ Some features of the dashboard:
 
 1. That's all! Your Magic Dashboard should now be refreshed every hour!
 
-![20230412_214652](https://user-images.githubusercontent.com/5581989/231485348-35d7e0df-034e-49aa-8500-223b2b3bdcc0.JPG)
-
-![20230412_215020](https://user-images.githubusercontent.com/5581989/231484068-aa6ce877-1e0a-49fe-b47e-7c024752f42c.JPG)
-
-Selfie and family portrait together with the MagInkCal
-
 ## Troubleshooting
 
 ### Google Calendar token expired or was revoked
@@ -283,37 +311,3 @@ I won't be updating this code much, since it serves my needs well.
 Nevertheless, feel free to fork the repo and modify it for your own purpose.
 At the same time, check out other similar projects, such as [InkyCal](https://github.com/aceisace/Inkycal) by [/u/aceisace](https://www.reddit.com/user/aceisace/).
 It's much more polished and also actively developed.
-
-## Differences from upstream project
-
-What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
-
-- Deleted OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia))
-- OpenWeatherMap API
-  - Improved error handling and logging for weather data retrieval.
-  - Added robust defaults for missing or incomplete weather data.
-  - Ensured compatibility with the current One Call API (v3.0).
-- Google Calendar API
-  - Fix for displaying 2 or 1 calendar days.
-  - Added a configurable 12/24-hour time format option in `config.json`.
-- Improved Chromedriver detection
-  - Added smart auto-detection of chromedriver location using `which chromedriver`.
-  - Implemented fallback to common installation locations if auto-detection fails.
-  - Added helpful error messages and logging for troubleshooting.
-  - Enhanced error handling during the screenshot process.
-- Added time format configuration
-  - Implemented time formatting throughout the application that respects the user's preference.
-  - Added graceful handling of missing configuration with sensible defaults.
-- Better output and logging
-  - Added display of the absolute path to the generated image for easier verification.
-  - Improved logging throughout the application.
-  - Added informative messages about time format and other configuration options.
-- General code improvements
-  - Enhanced error handling throughout the codebase.
-  - Added more detailed logging.
-  - Improved resource management (properly closing webdriver with `driver.quit()`).
-  - Added configuration parameters with sensible defaults for better backward compatibility.
-
-These updates make MagInkDash compatible with current APIs, more user-friendly, and more robust in various environments, particularly on headless Raspberry Pi systems.
-
-See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/README.md>.
