@@ -179,7 +179,7 @@ class RenderHelper:
     def process_inputs(
         self,
         current_date,
-        all_event_list,  # Now receives all events
+        all_event_list,
         path_to_server_image,
         max_events_per_day=8,
         max_total_events=20,
@@ -207,17 +207,29 @@ class RenderHelper:
         cal_events_list = []
         for i in range(3):
             day_events = event_list[i] if i < len(event_list) else []
-            if len(day_events) > 0:
-                cal_events_text = ""
+            cal_events_text = ""
+
+            if len(day_events) == 0:
+                cal_events_text = '<li class="event"><div class="event-title">Nothing scheduled</div></li>'
             else:
-                cal_events_text = '<div class="event"><span class="event-time">Nothing to do!</span></div>'
-            for event in day_events:
-                cal_events_text += '<div class="event">'
-                if event["isMultiday"] or event["allday"]:
-                    cal_events_text += event['summary']
-                else:
-                    cal_events_text += '<span class="event-time">' + self.get_short_time(event['startDatetime']) + '</span> ' + event['summary']
-                cal_events_text += '</div>\n'
+                # Group all-day and timed events
+                allday_events = [e for e in day_events if e["isMultiday"] or e["allday"]]
+                timed_events  = [e for e in day_events if not e["isMultiday"] and not e["allday"]]
+
+                if allday_events:
+                    cal_events_text += '<li class="event allday"><div class="event-time">All day</div>'
+                    for e in allday_events:
+                        cal_events_text += '<div class="event-title">' + e['summary'] + '</div>'
+                    cal_events_text += '</li>\n'
+
+                for event in timed_events:
+                    cal_events_text += (
+                        '<li class="event">'
+                        '<div class="event-time">' + self.get_short_time(event['startDatetime']) + '</div>'
+                        '<div class="event-title">' + event['summary'] + '</div>'
+                        '</li>\n'
+                    )
+
             cal_events_list.append(cal_events_text)
 
         # Build the params dictionary for template formatting
@@ -227,15 +239,18 @@ class RenderHelper:
             "weekday": current_date.strftime("%A"),
             "events_today": cal_events_list[0],
             "tomorrow": (current_date + timedelta(days=1)).strftime("%A"),
+            "tomorrow_day": (current_date + timedelta(days=1)).strftime("%-d"),
+            "tomorrow_month": (current_date + timedelta(days=1)).strftime("%B"),
             "events_tomorrow": cal_events_list[1],
             "dayafter": (current_date + timedelta(days=2)).strftime("%A"),
+            "dayafter_day": (current_date + timedelta(days=2)).strftime("%-d"),
+            "dayafter_month": (current_date + timedelta(days=2)).strftime("%B"),
             "events_dayafter": cal_events_list[2],
         }
 
         # Write out the HTML file
-        htmlFile = open(self.currPath + '/dashboard.html', "w")
-        htmlFile.write(dashboard_template.format(**params))
-        htmlFile.close()
+        with open(self.currPath + '/dashboard.html', "w") as htmlFile:
+            htmlFile.write(dashboard_template.format(**params))
 
         # Take the screenshot
         self.get_screenshot(path_to_server_image)

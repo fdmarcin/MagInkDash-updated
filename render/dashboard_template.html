@@ -6,47 +6,46 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
-
         <link rel="stylesheet" href="css/dashboard.css">
     </head>
-    <body style="background: white;">
-        <div class="container">
-            <div class="row justify-content-center align-items-center dashboard-row">
-                <div class="col-md-5 left-panel">
-                    <div class="row">
-                        <div class="col-md-6 date-padding">
-                            <div class="text-right">
-                                <p class="big-day">{day}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 date-padding">
-                            <div class="col-md-12"  style="height: 130px"></div>
-                            <div>
-                                <p class="weekday-text">{weekday}<br />{month}</p>
-                            </div>
-                        </div>
+    <body>
+        <div class="screen">
+            <div class="grid">
+
+                <div class="day-col">
+                    <div class="day-header">
+                        <div class="today-label">Today</div>
+                        <div class="day-name">{weekday}</div>
+                        <div class="day-number">{day}</div>
+                        <div class="day-month">{month}</div>
                     </div>
-                    <div class="today-events">
-                        <h2>Today</h2>
-                        <ol class="list-unstyled">
-                            {events_today}
-                        </ol>
-                    </div>
+                    <ol class="events list-unstyled">
+                        {events_today}
+                    </ol>
                 </div>
-                <div class="col-md-6 offset-md-1 right-panel">
-                    <div class="future-day">
-                        <h2>{tomorrow}</h2>
-                        <ol class="list-unstyled">
-                            {events_tomorrow}
-                        </ol>
+
+                <div class="day-col">
+                    <div class="day-header">
+                        <div class="day-name">{tomorrow}</div>
+                        <div class="day-number">{tomorrow_day}</div>
+                        <div class="day-month">{tomorrow_month}</div>
                     </div>
-                    <div class="future-day">
-                        <h2>{dayafter}</h2>
-                        <ol class="list-unstyled">
-                            {events_dayafter}
-                        </ol>
-                    </div>
+                    <ol class="events list-unstyled">
+                        {events_tomorrow}
+                    </ol>
                 </div>
+
+                <div class="day-col">
+                    <div class="day-header">
+                        <div class="day-name">{dayafter}</div>
+                        <div class="day-number">{dayafter_day}</div>
+                        <div class="day-month">{dayafter_month}</div>
+                    </div>
+                    <ol class="events list-unstyled">
+                        {events_dayafter}
+                    </ol>
+                </div>
+
             </div>
         </div>
     </body>
