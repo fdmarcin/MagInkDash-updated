@@ -191,9 +191,13 @@ class RenderHelper:
             max_total_events=max_total_events,
         )
 
-        # Use only the events for the optimal number of days
-        event_list = all_event_list[:optimal_days]
-        num_cal_days = optimal_days
+        # Always prepare up to three days (today + next two days)
+        max_display_days = min(3, len(all_event_list)) if all_event_list else 1
+        event_list = all_event_list[:max_display_days]
+
+        # Pad with empty lists if fewer than three days are available
+        while len(event_list) < 3:
+            event_list.append([])
 
         # Read html template
         with open(self.currPath + '/dashboard_template.html', 'r') as file:
@@ -201,12 +205,13 @@ class RenderHelper:
 
         # Populate the date and events
         cal_events_list = []
-        for i in range(num_cal_days):
-            if len(event_list[i]) > 0:
+        for i in range(3):
+            day_events = event_list[i] if i < len(event_list) else []
+            if len(day_events) > 0:
                 cal_events_text = ""
             else:
                 cal_events_text = '<div class="event"><span class="event-time">Nothing to do!</span></div>'
-            for event in event_list[i]:
+            for event in day_events:
                 cal_events_text += '<div class="event">'
                 if event["isMultiday"] or event["allday"]:
                     cal_events_text += event['summary']
@@ -215,104 +220,17 @@ class RenderHelper:
                 cal_events_text += '</div>\n'
             cal_events_list.append(cal_events_text)
 
-        # Determine layout properties based on number of days
-        if num_cal_days == 1:
-            # Only Today is shown (full width)
-            col_tomorrow_width = 6  # Won't be displayed
-
-            # Set visibility classes
-            tomorrow_vis_class = "hidden"
-            dayafter_vis_class = "hidden"
-        elif num_cal_days == 2:
-            # Today and Tomorrow are shown (half width each)
-            col_tomorrow_width = 6
-
-            # Set visibility classes
-            tomorrow_vis_class = ""
-            dayafter_vis_class = "hidden"
-        else:
-            # All three days are shown
-            col_tomorrow_width = 4
-
-            # Set visibility classes
-            tomorrow_vis_class = ""
-            dayafter_vis_class = ""
-
-        total_events_displayed = sum(len(day) for day in event_list)
-
-        day_label_cache = {
-            0: "Today",
-            1: "Tomorrow",
-        }
-
-        def get_day_label(offset):
-            if offset in day_label_cache:
-                return day_label_cache[offset]
-            return (current_date + timedelta(days=offset)).strftime("%A")
-
-        next_event_text = "Next: Nothing scheduled"
-        next_event_found = False
-        for day_index, events in enumerate(event_list):
-            if events:
-                first_event = events[0]
-                if first_event["isMultiday"] or first_event["allday"]:
-                    event_label = first_event['summary']
-                else:
-                    event_label = f"{self.get_short_time(first_event['startDatetime'])} {first_event['summary']}"
-                next_event_text = f"Next: {event_label} ({get_day_label(day_index)})"
-                next_event_found = True
-                break
-
-        if not next_event_found and total_events_displayed == 0:
-            next_event_text = "Next: Enjoy the free time"
-
-        if total_events_displayed == 0:
-            day_word = "day" if num_cal_days == 1 else "days"
-            calendar_summary = f"No events over the next {num_cal_days} {day_word}"
-        else:
-            event_word = "event" if total_events_displayed == 1 else "events"
-            day_word = "day" if num_cal_days == 1 else "days"
-            calendar_summary = f"{total_events_displayed} {event_word} across {num_cal_days} {day_word}"
-
         # Build the params dictionary for template formatting
         params = {
             "day": current_date.strftime("%-d"),
             "month": current_date.strftime("%B"),
             "weekday": current_date.strftime("%A"),
             "events_today": cal_events_list[0],
-            "tomorrow_vis_class": tomorrow_vis_class,
-            "dayafter_vis_class": dayafter_vis_class,
-            "calendar_summary": calendar_summary,
-            "next_event_text": next_event_text,
+            "tomorrow": (current_date + timedelta(days=1)).strftime("%A"),
+            "events_tomorrow": cal_events_list[1],
+            "dayafter": (current_date + timedelta(days=2)).strftime("%A"),
+            "events_dayafter": cal_events_list[2],
         }
-
-        # Add day 2 params
-        if num_cal_days >= 2:
-            params.update({
-                "tomorrow": (current_date + timedelta(days=1)).strftime("%A"),
-                "events_tomorrow": cal_events_list[1],
-                "col_tomorrow_width": col_tomorrow_width
-            })
-        else:
-            # Default values for tomorrow
-            params.update({
-                "tomorrow": "",
-                "events_tomorrow": "",
-                "col_tomorrow_width": col_tomorrow_width
-            })
-
-        # Add day 3 params
-        if num_cal_days >= 3:
-            params.update({
-                "dayafter": (current_date + timedelta(days=2)).strftime("%A"),
-                "events_dayafter": cal_events_list[2],
-            })
-        else:
-            # Default values for day after tomorrow
-            params.update({
-                "dayafter": "",
-                "events_dayafter": "",
-            })
 
         # Write out the HTML file
         htmlFile = open(self.currPath + '/dashboard.html', "w")

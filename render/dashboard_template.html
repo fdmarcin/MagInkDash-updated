@@ -11,92 +11,43 @@
     </head>
     <body style="background: white;">
         <div class="container">
-            <!-- Calendar - Expand -->
             <div class="row justify-content-center">
-                <div class="col-md-6">
+                <div class="col-md-5 left-panel">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 date-padding">
-                                    <div class="text-right">
-                                        <p class="big-day">{day}</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 date-padding">
-                                    <div class="col-md-12"  style="height: 130px"></div>
-                                    <div>
-                                        <p style="font-size: 2.5rem">{weekday}<br />{month}</p>
-                                    </div>
-                                </div>
+                        <div class="col-md-6 date-padding">
+                            <div class="text-right">
+                                <p class="big-day">{day}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 date-padding">
+                            <div class="col-md-12"  style="height: 130px"></div>
+                            <div>
+                                <p class="weekday-text">{weekday}<br />{month}</p>
                             </div>
                         </div>
                     </div>
-                             <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 30px"></div>
-                    </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12 text-center">
-                            <h2>{calendar_summary}</h2>
-                            <p class="next-event">{next_event_text}</p>
-                        </div>
-                    </div>
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 20px"></div>
-                    </div>
-
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 50px"></div>
+                    <div class="today-events">
+                        <h2>Today</h2>
+                        <ol class="list-unstyled">
+                            {events_today}
+                        </ol>
                     </div>
                 </div>
-
-                <!-- Calendar events section - EXPANDED -->
-                <div class="col-md-6">
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 50px"></div>
+                <div class="col-md-1 divider-col">
+                    <div class="dashboard-divider"></div>
+                </div>
+                <div class="col-md-6 right-panel">
+                    <div class="future-day">
+                        <h2>{tomorrow}</h2>
+                        <ol class="list-unstyled">
+                            {events_tomorrow}
+                        </ol>
                     </div>
-
-                    <!-- Today's events -->
-                    <div class="row align-items-start ">
-                        <div class="col-md-12">
-                            <h2>Today</h2>
-                            <ol class="list-unstyled">
-                                {events_today}
-                            </ol>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 20px"></div>
-                    </div>
-
-                    <!-- Tomorrow's events -->
-                    <div class="row align-items-start tomorrow-events {tomorrow_vis_class}">
-                        <div class="col-md-12">
-                            <h2>{tomorrow}</h2>
-                            <ol class="list-unstyled">
-                                {events_tomorrow}
-                            </ol>
-                        </div>
-                    </div>
-
-                    <!-- Day after spacer - only shown if needed -->
-                    <div class="row align-items-start dayafter-spacer {dayafter_vis_class}">
-                        <div class="col-md-12" style="height: 20px"></div>
-                    </div>
-
-                    <!-- Day after tomorrow's events -->
-                    <div class="row align-items-start dayafter-events {dayafter_vis_class}">
-                        <div class="col-md-12">
-                            <h2>{dayafter}</h2>
-                            <ol class="list-unstyled">
-                                {events_dayafter}
-                            </ol>
-                        </div>
-                    </div>
-
-                    <!-- Additional spacing to fill the freed up space -->
-                    <div class="row align-items-start ">
-                        <div class="col-md-12"  style="height: 50px"></div>
+                    <div class="future-day">
+                        <h2>{dayafter}</h2>
+                        <ol class="list-unstyled">
+                            {events_dayafter}
+                        </ol>
                     </div>
                 </div>
             </div>

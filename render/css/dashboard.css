@@ -38,26 +38,37 @@
     color: #333;
 }
 
-/* Improved spacing for calendar sections */
-.tomorrow-events, .dayafter-events {
-    margin-top: 20px;
-}
-
-/* Better typography for expanded calendar */
-.calendar-events h2 {
-    margin-bottom: 15px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
-}
-
 /* Optimize for larger calendar content */
 .list-unstyled {
-    max-height: none; /* Remove any height restrictions */
+    max-height: none;
     overflow: visible;
 }
 
-.next-event {
-    font-size: 1.8rem;
-    color: #555;
+.left-panel, .right-panel {
+    padding-top: 40px;
+}
+
+.today-events ol,
+.future-day ol {
     margin-top: 10px;
+}
+
+.future-day + .future-day {
+    margin-top: 30px;
+}
+
+.dashboard-divider {
+    width: 2px;
+    min-height: 400px;
+    background: #dcdcdc;
+}
+
+.divider-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.today-events {
+    margin-top: 50px;
 }

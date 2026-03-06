@@ -30,6 +30,10 @@ h1, h2, p, span, .h1, .h2, .p, .span  {
     font-size: 18rem;
 }
 
+.weekday-text {
+    font-size: 2.5rem;
+}
+
 .event {
     max-width: 95%;
     font-family: "Lexend-Regular", sans-serif;
