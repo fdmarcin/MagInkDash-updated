@@ -57,11 +57,8 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 
 What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 
-- Deleted OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia), not actively maintained)
-- OpenWeatherMap API
-  - Improved error handling and logging for weather data retrieval.
-  - Added robust defaults for missing or incomplete weather data.
-  - Ensured compatibility with the current One Call API (v3.0).
+- Dropped OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia), not actively maintained)
+- Dropped OpenWeatherMap API integration (if you want to use it, see branch [`calendar-with-weather`](https://github.com/fdmarcin/MagInkDash-updated/tree/calendar-with-weather), not actively maintained)
 - Google Calendar API
   - Fix for displaying 2 or 1 calendar days.
   - Added a configurable 12/24-hour time format option in `config.json`.
@@ -141,6 +138,7 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    - If you run the script while connected to the RPi through SSH and open the URL on your local machine, the final redirect likely fails.
      You should do it on the same machine.
 
+1. Copy the config file `config-example.json` and name the new one `config.json`.
 1. Fill out the config file [`config.json`](./config.json):
 
    - `displayTZ`: Set to your timezone. Use the [TZ identifier format](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
