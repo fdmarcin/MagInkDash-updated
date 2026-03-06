@@ -55,3 +55,9 @@
     max-height: none; /* Remove any height restrictions */
     overflow: visible;
 }
+
+.next-event {
+    font-size: 1.8rem;
+    color: #555;
+    margin-top: 10px;
+}

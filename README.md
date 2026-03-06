@@ -111,7 +111,7 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
    sudo apt install apache2 -y
    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-   pip3 install pytz selenium Pillow
+   pip3 install pytz selenium
    sudo chown pi:www-data /var/www/html
    sudo chmod 755 /var/www/html
    ```

@@ -12,8 +12,6 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 from datetime import timedelta
 import pathlib
-import string
-from PIL import Image
 import logging
 from selenium.webdriver.common.by import By
 
@@ -181,16 +179,17 @@ class RenderHelper:
     def process_inputs(
         self,
         current_date,
-        current_weather,
-        hourly_forecast,
-        daily_forecast,
         all_event_list,  # Now receives all events
         path_to_server_image,
         max_events_per_day=8,
         max_total_events=20,
     ):
         # Determine optimal number of days to show based on events
-        optimal_days = self.calculate_optimal_days(all_event_list)
+        optimal_days = self.calculate_optimal_days(
+            all_event_list,
+            max_events_per_day=max_events_per_day,
+            max_total_events=max_total_events,
+        )
 
         # Use only the events for the optimal number of days
         event_list = all_event_list[:optimal_days]
@@ -216,43 +215,9 @@ class RenderHelper:
                 cal_events_text += '</div>\n'
             cal_events_list.append(cal_events_text)
 
-        # Default values for weather in case data is missing
-        default_weather = {
-            "weather": [{"description": "Unknown", "id": 800}],
-            "temp": 0
-        }
-        default_daily = {
-            "weather": [{"id": 800}],
-            "pop": 0,
-            "temp": {"min": 0, "max": 0}
-        }
-
-        # Ensure we have valid weather data or use defaults
-        if not current_weather or "weather" not in current_weather or len(current_weather["weather"]) == 0:
-            self.logger.warning("Current weather data is missing or invalid, using defaults")
-            current_weather = default_weather
-
-        next_hour_weather = default_weather
-        if hourly_forecast and len(hourly_forecast) > 1:
-            next_hour_weather = hourly_forecast[1]
-
-        # Ensure we have valid daily forecast data
-        daily_forecast_data = []
-        for i in range(min(3, len(daily_forecast))):
-            if daily_forecast and len(daily_forecast) > i:
-                daily_forecast_data.append(daily_forecast[i])
-            else:
-                self.logger.warning(f"Daily forecast for day {i} is missing, using defaults")
-                daily_forecast_data.append(default_daily)
-
-        # If we have fewer than 3 days, fill in with defaults
-        while len(daily_forecast_data) < 3:
-            daily_forecast_data.append(default_daily)
-
         # Determine layout properties based on number of days
         if num_cal_days == 1:
             # Only Today is shown (full width)
-            col_today_width = 12
             col_tomorrow_width = 6  # Won't be displayed
 
             # Set visibility classes
@@ -260,37 +225,65 @@ class RenderHelper:
             dayafter_vis_class = "hidden"
         elif num_cal_days == 2:
             # Today and Tomorrow are shown (half width each)
-            col_today_width = 6
             col_tomorrow_width = 6
 
             # Set visibility classes
             tomorrow_vis_class = ""
             dayafter_vis_class = "hidden"
         else:
-            # All three days are shown (one-third width each)
-            col_today_width = 4
+            # All three days are shown
             col_tomorrow_width = 4
 
             # Set visibility classes
             tomorrow_vis_class = ""
             dayafter_vis_class = ""
 
+        total_events_displayed = sum(len(day) for day in event_list)
+
+        day_label_cache = {
+            0: "Today",
+            1: "Tomorrow",
+        }
+
+        def get_day_label(offset):
+            if offset in day_label_cache:
+                return day_label_cache[offset]
+            return (current_date + timedelta(days=offset)).strftime("%A")
+
+        next_event_text = "Next: Nothing scheduled"
+        next_event_found = False
+        for day_index, events in enumerate(event_list):
+            if events:
+                first_event = events[0]
+                if first_event["isMultiday"] or first_event["allday"]:
+                    event_label = first_event['summary']
+                else:
+                    event_label = f"{self.get_short_time(first_event['startDatetime'])} {first_event['summary']}"
+                next_event_text = f"Next: {event_label} ({get_day_label(day_index)})"
+                next_event_found = True
+                break
+
+        if not next_event_found and total_events_displayed == 0:
+            next_event_text = "Next: Enjoy the free time"
+
+        if total_events_displayed == 0:
+            day_word = "day" if num_cal_days == 1 else "days"
+            calendar_summary = f"No events over the next {num_cal_days} {day_word}"
+        else:
+            event_word = "event" if total_events_displayed == 1 else "events"
+            day_word = "day" if num_cal_days == 1 else "days"
+            calendar_summary = f"{total_events_displayed} {event_word} across {num_cal_days} {day_word}"
+
         # Build the params dictionary for template formatting
         params = {
             "day": current_date.strftime("%-d"),
             "month": current_date.strftime("%B"),
             "weekday": current_date.strftime("%A"),
-            "current_weather_text": string.capwords(next_hour_weather["weather"][0]["description"]),
-            "current_weather_id": next_hour_weather["weather"][0]["id"],
-            "current_weather_temp": round(next_hour_weather.get("temp", 0)),
-            "today_weather_id": daily_forecast_data[0]["weather"][0]["id"],
-            "today_weather_pop": str(round(daily_forecast_data[0].get("pop", 0) * 100)),
-            "today_weather_min": str(round(daily_forecast_data[0]["temp"].get("min", 0))),
-            "today_weather_max": str(round(daily_forecast_data[0]["temp"].get("max", 0))),
             "events_today": cal_events_list[0],
-            "col_today_width": col_today_width,
             "tomorrow_vis_class": tomorrow_vis_class,
             "dayafter_vis_class": dayafter_vis_class,
+            "calendar_summary": calendar_summary,
+            "next_event_text": next_event_text,
         }
 
         # Add day 2 params
@@ -298,10 +291,6 @@ class RenderHelper:
             params.update({
                 "tomorrow": (current_date + timedelta(days=1)).strftime("%A"),
                 "events_tomorrow": cal_events_list[1],
-                "tomorrow_weather_id": daily_forecast_data[1]["weather"][0]["id"],
-                "tomorrow_weather_pop": str(round(daily_forecast_data[1].get("pop", 0) * 100)),
-                "tomorrow_weather_min": str(round(daily_forecast_data[1]["temp"].get("min", 0))),
-                "tomorrow_weather_max": str(round(daily_forecast_data[1]["temp"].get("max", 0))),
                 "col_tomorrow_width": col_tomorrow_width
             })
         else:
@@ -309,10 +298,6 @@ class RenderHelper:
             params.update({
                 "tomorrow": "",
                 "events_tomorrow": "",
-                "tomorrow_weather_id": 800,  # Clear sky as default
-                "tomorrow_weather_pop": "0",
-                "tomorrow_weather_min": "0",
-                "tomorrow_weather_max": "0",
                 "col_tomorrow_width": col_tomorrow_width
             })
 
@@ -321,20 +306,12 @@ class RenderHelper:
             params.update({
                 "dayafter": (current_date + timedelta(days=2)).strftime("%A"),
                 "events_dayafter": cal_events_list[2],
-                "dayafter_weather_id": daily_forecast_data[2]["weather"][0]["id"],
-                "dayafter_weather_pop": str(round(daily_forecast_data[2].get("pop", 0) * 100)),
-                "dayafter_weather_min": str(round(daily_forecast_data[2]["temp"].get("min", 0))),
-                "dayafter_weather_max": str(round(daily_forecast_data[2]["temp"].get("max", 0)))
             })
         else:
             # Default values for day after tomorrow
             params.update({
                 "dayafter": "",
                 "events_dayafter": "",
-                "dayafter_weather_id": 800,  # Clear sky as default
-                "dayafter_weather_pop": "0",
-                "dayafter_weather_min": "0",
-                "dayafter_weather_max": "0"
             })
 
         # Write out the HTML file
