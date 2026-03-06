@@ -116,6 +116,7 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    sudo chmod 755 /var/www/html
    ```
 
+1. Optional. Install [`mise`](https://mise.jdx.dev/installing-mise.html) for dependency management.
 1. Download the files in this repo to a folder in your PC.
 1. To access your Google Calendar events, it's necessary to first grant the access.
    Follow [Google's Python quick start](https://developers.google.com/calendar/api/quickstart/python)
