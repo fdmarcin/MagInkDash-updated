@@ -48,6 +48,12 @@
     padding-top: 40px;
 }
 
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .today-events ol,
 .future-day ol {
     margin-top: 10px;
@@ -58,9 +64,10 @@
 }
 
 .dashboard-divider {
-    width: 2px;
-    min-height: 400px;
-    background: #dcdcdc;
+    width: 6px;
+    height: 70%;
+    background: #c0c0c0;
+    border-radius: 3px;
 }
 
 .divider-col {
@@ -71,4 +78,9 @@
 
 .today-events {
     margin-top: 50px;
+    padding-left: 30px;
+}
+
+.dashboard-row {
+    min-height: 700px;
 }
