@@ -104,11 +104,11 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
 1. Run the following commands in the RPi Terminal to setup the environment to run the Python scripts and function as a web server.
    It'll take some time so be patient here.
 
-   If you changed your username during `raspi-config`, change the `chown` command to use it instead of `pi`.
+   If you changed your username during `raspi-config`, in the `chown` command change `pi` to use your username.
 
    ```bash
    sudo apt update
-   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev
+   sudo apt install -y python3-pip chromium-chromedriver libopenjp2-7-dev fonts-noto-color-emoji
    sudo apt install apache2 -y
    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
    pip3 install pytz selenium
