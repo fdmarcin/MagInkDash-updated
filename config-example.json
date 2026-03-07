@@ -2,8 +2,6 @@
     "displayTZ": "Asia/Hong_Kong",
     "calendars": ["primary"],
     "timeFormat": 12,
-    "maxEventsPerDay": 8,
-    "maxTotalEvents": 20,
     "imageWidth": 1200,
     "imageHeight": 825,
     "rotateAngle": 0,

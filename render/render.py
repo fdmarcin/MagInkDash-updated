@@ -181,17 +181,8 @@ class RenderHelper:
         current_date,
         all_event_list,
         path_to_server_image,
-        max_events_per_day=8,
-        max_total_events=20,
     ):
-        # Determine optimal number of days to show based on events
-        optimal_days = self.calculate_optimal_days(
-            all_event_list,
-            max_events_per_day=max_events_per_day,
-            max_total_events=max_total_events,
-        )
-
-        # Always prepare up to three days (today + next two days)
+        # Always prepare three days (today + next two days)
         max_display_days = min(3, len(all_event_list)) if all_event_list else 1
         event_list = all_event_list[:max_display_days]
 

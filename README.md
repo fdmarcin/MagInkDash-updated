@@ -41,10 +41,9 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 
 - **Calendar**:
 
-  I'm currently displaying calendar events for the current day and upcoming days.
+  The dashboard displays calendar events for the current day and 2 upcoming days.
   No real reason other than the desire to know what my weekend looks like on a Friday, and therefore helping me to better plan my weekend.
-  Unfortunately, if you have a busy calendar with numerous events on a single day, the space on the dashboard is consumed very quickly.
-  If so, you might wish to modify the code to reduce/limit the number of days/events to be displayed by setting `"numCalDaysToShow"` in `config.json` to a different value.
+  If you have a busy calendar with numerous events on a single day, the font size will shrink to accomodate them.
 
 - **Telegram Bot**:
 
@@ -150,7 +149,6 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    - `calendars`: `primary` is your main calendar.
      To add more, get their IDs from Google Calendar settings.
      For example: `["primary", "example@import.calendar.google.com"]`
-   - `max_events_per_day` and `max_total_events` to limit the maximum of events shown.
    - `timeFormat`: To format calendar times using the 24-hour clock, change the value to `24`.
    - `imageWidth` and `imageHeight` should match the resolution of your display.
      `1200` and `825` match Inkplate 10.

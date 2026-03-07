@@ -17,7 +17,6 @@ from gcal.gcal import GcalModule
 from render.render import RenderHelper
 
 
-
 if __name__ == '__main__':
     logger = logging.getLogger('maginkdash')
 
@@ -25,10 +24,8 @@ if __name__ == '__main__':
     configFile = open('config.json')
     config = json.load(configFile)
 
-    calendars = config['calendars'] # Google Calendar IDs
-    maxTotalEvents = config.get('maxTotalEvents', 20)
-    maxEventsPerDay = config.get('maxEventsPerDay', 8)
-    displayTZ = timezone(config['displayTZ']) # list of timezones - print(pytz.all_timezones)
+    calendars = config['calendars']  # Google Calendar IDs
+    displayTZ = timezone(config['displayTZ'])  # list of timezones - print(pytz.all_timezones)
     imageWidth = config['imageWidth']  # Width of image to be generated for display.
     imageHeight = config['imageHeight']  # Height of image to be generated for display.
     rotateAngle = config['rotateAngle']  # If image is rendered in portrait orientation, angle to rotate to fit screen
@@ -43,11 +40,10 @@ if __name__ == '__main__':
     logger.info("Starting dashboard update")
     logger.info(f"Using {'24' if timeFormat == 24 else '12'}-hour time format")
 
-    # Retrieve Calendar Data - get up to 7 days initially
+    # Retrieve Calendar Data - get up to 3 days
     currDate = dt.now(displayTZ).date()
-    maxDaysToRetrieve = 7  # Get a week's worth of events
     calStartDatetime = displayTZ.localize(dt.combine(currDate, dt.min.time()))
-    calEndDatetime = displayTZ.localize(dt.combine(currDate + datetime.timedelta(days=maxDaysToRetrieve-1), dt.max.time()))
+    calEndDatetime = displayTZ.localize(dt.combine(currDate + datetime.timedelta(days=2), dt.max.time()))
     calModule = GcalModule()
     allEventList = calModule.get_events(
         currDate,
@@ -55,7 +51,7 @@ if __name__ == '__main__':
         calStartDatetime,
         calEndDatetime,
         displayTZ,
-        maxDaysToRetrieve,
+        3,
     )
 
     # Render Dashboard Image
@@ -64,8 +60,6 @@ if __name__ == '__main__':
         currDate,
         allEventList,
         path_to_server_image,
-        maxEventsPerDay,
-        maxTotalEvents,
     )
 
     # Get absolute path to the generated image
