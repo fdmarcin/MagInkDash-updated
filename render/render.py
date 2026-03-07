@@ -18,13 +18,12 @@ from selenium.webdriver.common.by import By
 
 class RenderHelper:
 
-    def __init__(self, width, height, angle, timeFormat=12):
+    def __init__(self, width, height, timeFormat=12):
         self.logger = logging.getLogger('maginkdash')
         self.currPath = str(pathlib.Path(__file__).parent.absolute())
         self.htmlFile = 'file://' + self.currPath + '/dashboard.html'
         self.imageWidth = width
         self.imageHeight = height
-        self.rotateAngle = angle
         self.timeFormat = timeFormat  # 12 or 24-hour time format
 
     def set_viewport_size(self, driver):

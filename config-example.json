@@ -5,6 +5,5 @@
     "timeFormat": 12,
     "imageWidth": 1200,
     "imageHeight": 825,
-    "rotateAngle": 0,
     "path_to_server_image": "/var/www/html/maginkdash.png"
 }

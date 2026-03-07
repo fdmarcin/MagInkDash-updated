@@ -29,7 +29,6 @@ if __name__ == '__main__':
     displayTZ = timezone(config['displayTZ'])  # list of timezones - print(pytz.all_timezones)
     imageWidth = config['imageWidth']  # Width of image to be generated for display.
     imageHeight = config['imageHeight']  # Height of image to be generated for display.
-    rotateAngle = config['rotateAngle']  # If image is rendered in portrait orientation, angle to rotate to fit screen
     timeFormat = config.get('timeFormat', 12)  # 12 or 24-hour time format, default to 12 if not specified
     path_to_server_image = config["path_to_server_image"]  # Location to save the generated image
 
@@ -56,7 +55,7 @@ if __name__ == '__main__':
     )
 
     # Render Dashboard Image
-    renderService = RenderHelper(imageWidth, imageHeight, rotateAngle, timeFormat)
+    renderService = RenderHelper(imageWidth, imageHeight, timeFormat)
     renderService.process_inputs(
         currDate,
         allEventList,
