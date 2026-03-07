@@ -12,7 +12,9 @@ This repo contains the code needed to drive an e-ink magic dashboard that uses a
 > [!NOTE]
 > The code has only been tested on the specific hardware mentioned, but can be easily modified to work with other hardware (for both the server or display).
 
-![example dashboard on a 10 inch Inkplate screen](img/dashboard-example.png)
+![example dashboard](img/dashboard-example.png)
+
+![example dashboard with nothing to do](img/dashboard-empty.png)
 
 ## Hardware required
 

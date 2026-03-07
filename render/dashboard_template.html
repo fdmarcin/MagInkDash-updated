@@ -19,7 +19,7 @@
                         <div class="day-number">{day}</div>
                         <div class="day-month">{month}</div>
                     </div>
-                    <ol class="events list-unstyled">
+                    <ol class="events list-unstyled {today_empty}">
                         {events_today}
                     </ol>
                 </div>
@@ -30,7 +30,7 @@
                         <div class="day-number">{tomorrow_day}</div>
                         <div class="day-month">{tomorrow_month}</div>
                     </div>
-                    <ol class="events list-unstyled">
+                    <ol class="events list-unstyled {tomorrow_empty}">
                         {events_tomorrow}
                     </ol>
                 </div>
@@ -41,7 +41,7 @@
                         <div class="day-number">{dayafter_day}</div>
                         <div class="day-month">{dayafter_month}</div>
                     </div>
-                    <ol class="events list-unstyled">
+                    <ol class="events list-unstyled {dayafter_empty}">
                         {events_dayafter}
                     </ol>
                 </div>

@@ -13,6 +13,7 @@ from time import sleep
 from datetime import timedelta
 import pathlib
 import logging
+import os
 from selenium.webdriver.common.by import By
 
 
@@ -46,7 +47,6 @@ class RenderHelper:
 
     def get_screenshot(self, path_to_server_image):
         import subprocess
-        import os
         from selenium.webdriver.chrome.service import Service
 
         opts = Options()
@@ -199,7 +199,12 @@ class RenderHelper:
         while len(event_list) < 3:
             event_list.append([])
 
-        # Read html template
+        # Load and shuffle SVGs for empty state display
+        import random
+        empty_state_dir = os.path.join(self.currPath, 'empty_states')
+        svg_files = sorted([f for f in os.listdir(empty_state_dir) if f.endswith('.svg')])
+        random.shuffle(svg_files)
+        svg_index = 0
         with open(self.currPath + '/dashboard_template.html', 'r') as file:
             dashboard_template = file.read()
 
@@ -210,7 +215,20 @@ class RenderHelper:
             cal_events_text = ""
 
             if len(day_events) == 0:
-                cal_events_text = '<li class="event"><div class="event-title">Nothing scheduled</div></li>'
+                svg_content = ""
+                if svg_files:
+                    import re as _re
+                    svg_path = os.path.join(empty_state_dir, svg_files[svg_index % len(svg_files)])
+                    svg_index += 1
+                    with open(svg_path, 'r') as f:
+                        svg_content = f.read()
+                    # Remove hardcoded width/height from <svg> tag so CSS can control size
+                    svg_content = _re.sub(r'(<svg[^>]*)\s+width="[^"]*"', r'\1', svg_content)
+                    svg_content = _re.sub(r'(<svg[^>]*)\s+height="[^"]*"', r'\1', svg_content)
+                cal_events_text = (
+                    '<li class="nothing-today"><div class="event-title">Nothing to do!</div></li>'
+                    '<li class="empty-state-svg">' + svg_content + '</li>'
+                )
             else:
                 # Group all-day and timed events
                 allday_events = [e for e in day_events if e["isMultiday"] or e["allday"]]
@@ -237,14 +255,17 @@ class RenderHelper:
             "day": current_date.strftime("%-d"),
             "month": current_date.strftime("%B"),
             "weekday": current_date.strftime("%A"),
+            "today_empty": 'empty' if len(event_list[0]) == 0 else '',
             "events_today": cal_events_list[0],
             "tomorrow": (current_date + timedelta(days=1)).strftime("%A"),
             "tomorrow_day": (current_date + timedelta(days=1)).strftime("%-d"),
             "tomorrow_month": (current_date + timedelta(days=1)).strftime("%B"),
+            "tomorrow_empty": 'empty' if len(event_list[1]) == 0 else '',
             "events_tomorrow": cal_events_list[1],
             "dayafter": (current_date + timedelta(days=2)).strftime("%A"),
             "dayafter_day": (current_date + timedelta(days=2)).strftime("%-d"),
             "dayafter_month": (current_date + timedelta(days=2)).strftime("%B"),
+            "dayafter_empty": 'empty' if len(event_list[2]) == 0 else '',
             "events_dayafter": cal_events_list[2],
         }
 
