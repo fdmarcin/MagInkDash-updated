@@ -82,7 +82,8 @@ What I've changed compared to <https://github.com/speedyg0nz/MagInkDash>:
   - Added configuration parameters with sensible defaults for better backward compatibility.
 - Dashboard design
   - Always display 3 days in columns of equal width.
-  - Add ability to filter out event names with regex.
+  - Added ability to filter out event names with regex.
+  - Added empty state illustrations.
 
 See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/README.md>.
 
@@ -304,11 +305,10 @@ If you can't authorize the app in the browser:
 
 ## Acknowledgements
 
-- [Lexend Font](https://fonts.google.com/specimen/Lexend) and [Tilt Warp Font](https://fonts.google.com/specimen/Tilt+Warp): Fonts used for the dashboard display.
-- [Bootstrap](https://getbootstrap.com/): Styling toolkit to customise the look of the dashboard.
-- Streamlined project to focus on calendar events.
-- [Freepik](https://www.freepik.com/): For the background image used in this dashboard.
 - [speedyg0nz](https://github.com/speedyg0nz): For [the original project](https://github.com/speedyg0nz/MagInkDash).
+- [Lexend Font](https://fonts.google.com/specimen/Lexend) and [Tilt Warp Font](https://fonts.google.com/specimen/Tilt+Warp): Fonts used for the dashboard display.
+- [Bootstrap](https://getbootstrap.com/): Styling toolkit to customize the look of the dashboard.
+- [OpenDoodles](https://www.opendoodles.com/): Beautiful free illustrations used for empty states.
 
 ## Contributing
 
