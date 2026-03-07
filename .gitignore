@@ -5,6 +5,9 @@ gcal/credentials.json
 render/dashboard.html
 render/dashboard.png
 
+# Editor files
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
