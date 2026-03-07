@@ -181,10 +181,20 @@ class RenderHelper:
         current_date,
         all_event_list,
         path_to_server_image,
+        ignore_patterns=None,
     ):
         # Always prepare three days (today + next two days)
         max_display_days = min(3, len(all_event_list)) if all_event_list else 1
         event_list = all_event_list[:max_display_days]
+
+        # Filter out events matching any ignore pattern
+        if ignore_patterns:
+            import re
+            compiled = [re.compile(p, re.IGNORECASE) for p in ignore_patterns]
+            event_list = [
+                [e for e in day if not any(p.search(e['summary']) for p in compiled)]
+                for day in event_list
+            ]
 
         # Pad with empty lists if fewer than three days are available
         while len(event_list) < 3:

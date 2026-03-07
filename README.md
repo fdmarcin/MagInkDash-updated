@@ -59,27 +59,28 @@ What I've changed compared to https://github.com/speedyg0nz/MagInkDash:
 - Dropped OpenAI API integration (if you want to use it, see branch [`openAI-trivia`](https://github.com/fdmarcin/MagInkDash-updated/tree/openAI-trivia), not actively maintained)
 - Dropped OpenWeatherMap API integration (if you want to use it, see branch [`calendar-with-weather`](https://github.com/fdmarcin/MagInkDash-updated/tree/calendar-with-weather), not actively maintained)
 - Google Calendar API
-  - Fix for displaying 2 or 1 calendar days.
-  - Added a configurable 12/24-hour time format option in `config.json`.
+   - Fix for displaying 2 or 1 calendar days.
+   - Added a configurable 12/24-hour time format option in `config.json`.
 - Improved Chromedriver detection
-  - Added smart auto-detection of chromedriver location using `which chromedriver`.
-  - Implemented fallback to common installation locations if auto-detection fails.
-  - Added helpful error messages and logging for troubleshooting.
-  - Enhanced error handling during the screenshot process.
+   - Added smart auto-detection of chromedriver location using `which chromedriver`.
+   - Implemented fallback to common installation locations if auto-detection fails.
+   - Added helpful error messages and logging for troubleshooting.
+   - Enhanced error handling during the screenshot process.
 - Added time format configuration
-  - Implemented time formatting throughout the application that respects the user's preference.
-  - Added graceful handling of missing configuration with sensible defaults.
+   - Implemented time formatting throughout the application that respects the user's preference.
+   - Added graceful handling of missing configuration with sensible defaults.
 - Better output and logging
-  - Added display of the absolute path to the generated image for easier verification.
-  - Improved logging throughout the application.
-  - Added informative messages about time format and other configuration options.
+   - Added display of the absolute path to the generated image for easier verification.
+   - Improved logging throughout the application.
+   - Added informative messages about time format and other configuration options.
 - General code improvements
-  - Enhanced error handling throughout the codebase.
-  - Added more detailed logging.
-  - Improved resource management (properly closing webdriver with `driver.quit()`).
-  - Added configuration parameters with sensible defaults for better backward compatibility.
-
-These updates make MagInkDash compatible with current APIs, more user-friendly, and more robust in various environments, particularly on headless Raspberry Pi systems.
+   - Enhanced error handling throughout the codebase.
+   - Added more detailed logging.
+   - Improved resource management (properly closing webdriver with `driver.quit()`).
+   - Added configuration parameters with sensible defaults for better backward compatibility.
+- Dashboard design
+   - Always display 3 days in columns of equal width.
+   - Add ability to filter out event names with regex.
 
 See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/README.md>.
 
@@ -149,9 +150,13 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
    - `calendars`: `primary` is your main calendar.
      To add more, get their IDs from Google Calendar settings.
      For example: `["primary", "example@import.calendar.google.com"]`
+   - `ignorePatterns`: Use regex to match event names you don't want to display.
+     The patterns are case-insensitive and match anywhere in the event title unless you anchor them with `^` (beginning) and `$` (end).
+     For example: `"ignorePatterns": ["^Lunch$", "Bass class"]`
    - `timeFormat`: To format calendar times using the 24-hour clock, change the value to `24`.
    - `imageWidth` and `imageHeight` should match the resolution of your display.
-     `1200` and `825` match Inkplate 10.
+
+     For Inkplate 10, use `1200` and `825`.
 
 1. The script to generate the dashboard should work now!
    To test it manually, run the following in the `MagInkDash-updated` folder:

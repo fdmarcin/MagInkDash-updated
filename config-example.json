@@ -1,6 +1,7 @@
 {
     "displayTZ": "Asia/Hong_Kong",
     "calendars": ["primary"],
+  "ignorePatterns": [],
     "timeFormat": 12,
     "imageWidth": 1200,
     "imageHeight": 825,

@@ -25,6 +25,7 @@ if __name__ == '__main__':
     config = json.load(configFile)
 
     calendars = config['calendars']  # Google Calendar IDs
+    ignorePatterns = config.get('ignorePatterns', [])  # Regex patterns for events to ignore
     displayTZ = timezone(config['displayTZ'])  # list of timezones - print(pytz.all_timezones)
     imageWidth = config['imageWidth']  # Width of image to be generated for display.
     imageHeight = config['imageHeight']  # Height of image to be generated for display.
@@ -60,6 +61,7 @@ if __name__ == '__main__':
         currDate,
         allEventList,
         path_to_server_image,
+        ignorePatterns,
     )
 
     # Get absolute path to the generated image
