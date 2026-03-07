@@ -48,5 +48,23 @@
 
             </div>
         </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {{
+            document.querySelectorAll(".events").forEach(function (container) {{
+                var minSize = 12;
+                var step = 1;
+                while (container.scrollHeight > container.clientHeight) {{
+                    var titles = container.querySelectorAll(".event-title");
+                    var times = container.querySelectorAll(".event-time");
+                    if (titles.length === 0) break;
+                    var curr = parseFloat(window.getComputedStyle(titles[0]).fontSize);
+                    if (curr <= minSize) break;
+                    var next = Math.max(curr - step, minSize);
+                    titles.forEach(function (el) {{ el.style.fontSize = next + "px"; }});
+                    times.forEach(function (el) {{ el.style.fontSize = Math.max(next - 4, minSize) + "px"; }});
+                }}
+            }});
+        }});
+    </script>
     </body>
 </html>
