@@ -55,7 +55,6 @@ class RenderHelper:
         opts.add_argument("--disable-dev-shm-usage")
         opts.add_argument("--hide-scrollbars")
         opts.add_argument("--disable-gpu")
-        opts.add_argument("--disable-software-rasterizer")
         opts.add_argument("--remote-debugging-pipe")
         opts.add_argument(f"--window-size={self.imageWidth},{self.imageHeight}")
         opts.add_argument('--force-device-scale-factor=1')
@@ -98,10 +97,42 @@ class RenderHelper:
         except Exception as e:
             self.logger.error(f"Error taking screenshot: {str(e)}")
             self.logger.error(f"ChromeDriver log: {self.currPath + '/chromedriver.log'}")
-            raise
+            self.get_screenshot_with_chromium(path_to_server_image)
         finally:
             if driver:
                 driver.quit()
+
+    def get_screenshot_with_chromium(self, path_to_server_image):
+        import shutil
+        import subprocess
+
+        chromium_path = shutil.which('chromium') or shutil.which('chromium-browser') or shutil.which('google-chrome')
+        if not chromium_path:
+            raise FileNotFoundError('Could not find a Chromium or Chrome executable')
+
+        self.logger.info(f"Trying direct Chromium screenshot with: {chromium_path}")
+        command = [
+            chromium_path,
+            '--headless=new',
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            '--hide-scrollbars',
+            '--disable-gpu',
+            f'--window-size={self.imageWidth},{self.imageHeight}',
+            '--force-device-scale-factor=1',
+            f'--screenshot={self.currPath + "/dashboard.png"}',
+            self.htmlFile,
+        ]
+        result = subprocess.run(command, capture_output=True, text=True, timeout=90)
+        if result.returncode != 0:
+            if result.stdout:
+                self.logger.error(result.stdout.strip())
+            if result.stderr:
+                self.logger.error(result.stderr.strip())
+            result.check_returncode()
+
+        shutil.copyfile(self.currPath + '/dashboard.png', path_to_server_image)
+        self.logger.info('Screenshot captured with direct Chromium and saved to file.')
 
     def get_short_time(self, datetimeObj):
         is24hour = (self.timeFormat == 24)
