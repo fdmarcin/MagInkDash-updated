@@ -66,6 +66,7 @@ What I've changed compared to <https://github.com/speedyg0nz/MagInkDash>:
 - Improved Chromedriver detection
   - Added smart auto-detection of chromedriver location using `which chromedriver`.
   - Implemented fallback to common installation locations if auto-detection fails.
+  - Added Firefox ESR screenshot fallback if Chromium/Chromedriver fails.
   - Added helpful error messages and logging for troubleshooting.
   - Enhanced error handling during the screenshot process.
 - Added time format configuration
@@ -111,7 +112,7 @@ See original README at <https://github.com/speedyg0nz/MagInkDash/blob/main/READM
 
    ```bash
    sudo apt update
-   sudo apt install -y chromium-chromedriver libopenjp2-7-dev
+   sudo apt install -y chromium-chromedriver firefox-esr libopenjp2-7-dev
    sudo apt install apache2 -y
    sudo chown pi:www-data /var/www/html
    sudo chmod 755 /var/www/html
