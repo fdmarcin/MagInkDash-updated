@@ -50,10 +50,14 @@ class RenderHelper:
         from selenium.webdriver.chrome.service import Service
 
         opts = Options()
-        opts.add_argument("--headless")
+        opts.add_argument("--headless=new")
         opts.add_argument("--no-sandbox")
         opts.add_argument("--disable-dev-shm-usage")
         opts.add_argument("--hide-scrollbars")
+        opts.add_argument("--disable-gpu")
+        opts.add_argument("--disable-software-rasterizer")
+        opts.add_argument("--remote-debugging-pipe")
+        opts.add_argument(f"--window-size={self.imageWidth},{self.imageHeight}")
         opts.add_argument('--force-device-scale-factor=1')
 
         # Try to automatically locate chromedriver
@@ -80,8 +84,9 @@ class RenderHelper:
                 raise FileNotFoundError("chromedriver executable not found in PATH")
 
         # Use the discovered chromedriver path
-        service = Service(chromedriver_path)
+        service = Service(chromedriver_path, log_output=self.currPath + '/chromedriver.log')
 
+        driver = None
         try:
             driver = webdriver.Chrome(service=service, options=opts)
             self.set_viewport_size(driver)
@@ -89,11 +94,14 @@ class RenderHelper:
             sleep(1)
             driver.get_screenshot_as_file(self.currPath + '/dashboard.png')
             driver.get_screenshot_as_file(path_to_server_image)
-            driver.quit()  # Make sure to quit the driver to free resources
             self.logger.info('Screenshot captured and saved to file.')
         except Exception as e:
             self.logger.error(f"Error taking screenshot: {str(e)}")
+            self.logger.error(f"ChromeDriver log: {self.currPath + '/chromedriver.log'}")
             raise
+        finally:
+            if driver:
+                driver.quit()
 
     def get_short_time(self, datetimeObj):
         is24hour = (self.timeFormat == 24)
