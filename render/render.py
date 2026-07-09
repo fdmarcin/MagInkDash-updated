@@ -97,7 +97,11 @@ class RenderHelper:
         except Exception as e:
             self.logger.error(f"Error taking screenshot: {str(e)}")
             self.logger.error(f"ChromeDriver log: {self.currPath + '/chromedriver.log'}")
-            self.get_screenshot_with_chromium(path_to_server_image)
+            try:
+                self.get_screenshot_with_chromium(path_to_server_image)
+            except Exception as chromium_error:
+                self.logger.error(f"Direct Chromium screenshot failed: {str(chromium_error)}")
+                self.get_screenshot_with_firefox(path_to_server_image)
         finally:
             if driver:
                 driver.quit()
@@ -133,6 +137,35 @@ class RenderHelper:
 
         shutil.copyfile(self.currPath + '/dashboard.png', path_to_server_image)
         self.logger.info('Screenshot captured with direct Chromium and saved to file.')
+
+    def get_screenshot_with_firefox(self, path_to_server_image):
+        import shutil
+        import subprocess
+
+        firefox_path = shutil.which('firefox') or shutil.which('firefox-esr')
+        if not firefox_path:
+            raise FileNotFoundError('Could not find a Firefox executable')
+
+        self.logger.info(f"Trying Firefox screenshot with: {firefox_path}")
+        command = [
+            firefox_path,
+            '--headless',
+            '--window-size',
+            f'{self.imageWidth},{self.imageHeight}',
+            '--screenshot',
+            self.currPath + '/dashboard.png',
+            self.htmlFile,
+        ]
+        result = subprocess.run(command, capture_output=True, text=True, timeout=90)
+        if result.returncode != 0:
+            if result.stdout:
+                self.logger.error(result.stdout.strip())
+            if result.stderr:
+                self.logger.error(result.stderr.strip())
+            result.check_returncode()
+
+        shutil.copyfile(self.currPath + '/dashboard.png', path_to_server_image)
+        self.logger.info('Screenshot captured with Firefox and saved to file.')
 
     def get_short_time(self, datetimeObj):
         is24hour = (self.timeFormat == 24)
